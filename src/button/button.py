@@ -3,6 +3,7 @@ class Button():
         self.image = image
         self.x_pos = pos[0]
         self.y_pos = pos[1]
+        self.currentPosition = [self.x_pos, self.y_pos]
         self.font = font
         self.base_color, self.hovering_color = base_color, hovering_color
         self.text_input = text_input
@@ -26,6 +27,9 @@ class Button():
 
         #self.rect = self.image.get_rect(center=(self.x_pos, self.y_pos))
         #self.text_rect = self.text.get_rect(center=(self.x_pos, self.y_pos))
+
+    def getPosition(self):
+        return self.currentPosition
 
     def checkForInput(self, position):		#checks if the mouse is on the button -> so presst the button
         if position[0] in range(self.rect.left, self.rect.right) and position[1] in range(self.rect.top, self.rect.bottom):
