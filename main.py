@@ -416,6 +416,7 @@ def makeMove(dice_num, position, color, currentFigure):
 
 def winner(counter):
     if player1.winner(yellowFigure_list) == True:
+        print("Gelb hat gewonnen")
         while True:
             screen.fill("#fcce8d")
             for event in pg.event.get():
