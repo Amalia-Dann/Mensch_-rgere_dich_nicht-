@@ -483,8 +483,6 @@ def rules():
         RULES_BACK = Button(image=None, pos=(1200, 690),
                               text_input="BACK", font=get_font(20), base_color="Black", hovering_color="White")
 
-
-
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 pg.quit()
