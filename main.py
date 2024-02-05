@@ -10,8 +10,8 @@ pg.init()
 
 # Start screen:
 screen = pg.display.set_mode((1280,720))
-pg.display.set_caption("Menü")
-BG = pg.image.load("assets/background.png")
+pg.display.set_caption("Don't get ANGRY!")
+
 
 clock = pg.time.Clock()
 
@@ -31,7 +31,7 @@ field_list = playground.fields()
 hauser_list = playground.houses()
 zielfelder_list = playground.finishFields()
 
-
+player_position = { }
 
 def get_font(size): # Returns Press-Start-2P in the desired size
     return pg.font.Font("assets/font.ttf", size)
@@ -70,7 +70,7 @@ def imageNumOfPoints(dice_num):
         diceImage = pg.image.load("assets/Augenzahl6.png")
         return diceImage
 def play():
-    pg.display.set_caption("Mensch ärger Dich nicht")
+    pg.display.set_caption("Don't get ANGRY!")
     background_color = "#fcce8d"
     gamefield = pg.image.load("assets/gamefield.png")
     gamefield, gamefield_rect = transform_scale_keep_ratio(gamefield, screen.get_size())
@@ -78,8 +78,9 @@ def play():
     PLAY_BACK = Button(image=None, pos=(1165, 670),
                        text_input="BACK", font=get_font(30), base_color="Black", hovering_color="WHITE")
 
-    GAME_ACTIVE = Button(image=None, pos=(100, 670), text_input="START", font=get_font(40),
-                         base_color="Black", hovering_color="WHITE")
+
+    GAME_ACTIVE = Button(image = None, pos = (135, 670), text_input = "START", font = get_font(30),
+                         base_color = "Black", hovering_color = "WHITE")
 
     # Text für Spieler-Aufforderung
     prompt_text = "Press Enter, to add a player"
@@ -179,7 +180,7 @@ def play():
         pg.display.update()
 
 def gameLoop(player_list):
-    pg.display.set_caption("Mensch ärger Dich nicht")
+    pg.display.set_caption("Don't get ANGRY!")
     background_color = "#fcce8d"
     gamefield = pg.image.load("assets/gamefield.png")
     gamefield, gamefield_rect = transform_scale_keep_ratio(gamefield, screen.get_size())
@@ -190,6 +191,8 @@ def gameLoop(player_list):
     DICE_BUTTON = Button(image=scaleImage(pg.image.load("assets/wuerfel.png"), 200, 200), pos=(1150, 90),
                          text_input="Roll the Dice",
                          font=get_font(10), base_color="BLACK", hovering_color="WHITE")
+
+    counter_fge1 = 0
 
     image = None
 
@@ -210,73 +213,74 @@ def gameLoop(player_list):
 
                 #Buttons for Yellow Figures 1-4
                 if FGE1_BUTTON.checkForInput(PLAY_MOUSE_POS):
-                    currentPos = makeMove(dice_num, fge1.getPosition(), "yellow")
+                    currentPos = makeMove(dice_num, fge1.getPosition(), "yellow", "fge1")
                     FGE1_BUTTON.updatePosition(currentPos)
                     fge1.setPosition(currentPos)
+                    yellowFigure_list[0] += dice_num
                 if FGE2_BUTTON.checkForInput(PLAY_MOUSE_POS):
-                    currentPos = makeMove(dice_num, fge2.getPosition(), "yellow")
+                    currentPos = makeMove(dice_num, fge2.getPosition(), "yellow", "fge2")
                     FGE2_BUTTON.updatePosition(currentPos)
                     fge2.setPosition(currentPos)
                 if FGE3_BUTTON.checkForInput(PLAY_MOUSE_POS):
-                    currentPos = makeMove(dice_num, fge3.getPosition(), "yellow")
+                    currentPos = makeMove(dice_num, fge3.getPosition(), "yellow", "fge3")
                     FGE3_BUTTON.updatePosition(currentPos)
                     fge3.setPosition(currentPos)
                 if FGE4_BUTTON.checkForInput(PLAY_MOUSE_POS):
-                    currentPos = makeMove(dice_num, fge4.getPosition(), "yellow")
+                    currentPos = makeMove(dice_num, fge4.getPosition(), "yellow", "fge4")
                     FGE4_BUTTON.updatePosition(currentPos)
                     fge4.setPosition(currentPos)
 
                 # Buttons for Green Figures 1-4
                 if FGR1_BUTTON.checkForInput(PLAY_MOUSE_POS):
-                    currentPos = makeMove(dice_num, fgr1.getPosition(), "green")
+                    currentPos = makeMove(dice_num, fgr1.getPosition(), "green", "fgr1")
                     FGR1_BUTTON.updatePosition(currentPos)
                     fgr1.setPosition(currentPos)
                 if FGR2_BUTTON.checkForInput(PLAY_MOUSE_POS):
-                    currentPos = makeMove(dice_num, fgr2.getPosition(), "green")
+                    currentPos = makeMove(dice_num, fgr2.getPosition(), "green", "fgr2")
                     FGR2_BUTTON.updatePosition(currentPos)
                     fgr2.setPosition(currentPos)
                 if FGR3_BUTTON.checkForInput(PLAY_MOUSE_POS):
-                    currentPos = makeMove(dice_num, fgr3.getPosition(), "green")
+                    currentPos = makeMove(dice_num, fgr3.getPosition(), "green", "fgr3")
                     FGR3_BUTTON.updatePosition(currentPos)
                     fgr3.setPosition(currentPos)
                 if FGR4_BUTTON.checkForInput(PLAY_MOUSE_POS):
-                    currentPos = makeMove(dice_num, fgr4.getPosition(), "green")
+                    currentPos = makeMove(dice_num, fgr4.getPosition(), "green", "fgr4")
                     FGR4_BUTTON.updatePosition(currentPos)
                     fgr4.setPosition(currentPos)
 
                 # Buttons for Blue Figures 1-4
                 if FB1_BUTTON.checkForInput(PLAY_MOUSE_POS):
-                    currentPos = makeMove(dice_num, fb1.getPosition(), "blue")
+                    currentPos = makeMove(dice_num, fb1.getPosition(), "blue", "fb1")
                     FB1_BUTTON.updatePosition(currentPos)
                     fb1.setPosition(currentPos)
                 if FB2_BUTTON.checkForInput(PLAY_MOUSE_POS):
-                    currentPos = makeMove(dice_num, fb2.getPosition(), "blue")
+                    currentPos = makeMove(dice_num, fb2.getPosition(), "blue", "fb2")
                     FB2_BUTTON.updatePosition(currentPos)
                     fb2.setPosition(currentPos)
                 if FB3_BUTTON.checkForInput(PLAY_MOUSE_POS):
-                    currentPos = makeMove(dice_num, fb3.getPosition(), "blue")
+                    currentPos = makeMove(dice_num, fb3.getPosition(), "blue", "fb3")
                     FB3_BUTTON.updatePosition(currentPos)
                     fb3.setPosition(currentPos)
                 if FB4_BUTTON.checkForInput(PLAY_MOUSE_POS):
-                    currentPos = makeMove(dice_num, fb4.getPosition(), "blue")
+                    currentPos = makeMove(dice_num, fb4.getPosition(), "blue", "fb4")
                     FB4_BUTTON.updatePosition(currentPos)
                     fb4.setPosition(currentPos)
 
                 # Buttons for Red Figures 1-4
                 if FR1_BUTTON.checkForInput(PLAY_MOUSE_POS):
-                    currentPos = makeMove(dice_num, fr1.getPosition(), "red")
+                    currentPos = makeMove(dice_num, fr1.getPosition(), "red", "fr1")
                     FR1_BUTTON.updatePosition(currentPos)
                     fr1.setPosition(currentPos)
                 if FR2_BUTTON.checkForInput(PLAY_MOUSE_POS):
-                    currentPos = makeMove(dice_num, fr2.getPosition(), "red")
+                    currentPos = makeMove(dice_num, fr2.getPosition(), "red", "fr2")
                     FR2_BUTTON.updatePosition(currentPos)
                     fr2.setPosition(currentPos)
                 if FR3_BUTTON.checkForInput(PLAY_MOUSE_POS):
-                    currentPos = makeMove(dice_num, fr3.getPosition(), "red")
+                    currentPos = makeMove(dice_num, fr3.getPosition(), "red", "fr3")
                     FR3_BUTTON.updatePosition(currentPos)
                     fr3.setPosition(currentPos)
                 if FR4_BUTTON.checkForInput(PLAY_MOUSE_POS):
-                    currentPos = makeMove(dice_num, fr4.getPosition(), "red")
+                    currentPos = makeMove(dice_num, fr4.getPosition(), "red", "fr4")
                     FR4_BUTTON.updatePosition(currentPos)
                     fr4.setPosition(currentPos)
 
@@ -330,12 +334,11 @@ def gameLoop(player_list):
         FB4_BUTTON.changeColor(PLAY_MOUSE_POS)
 
         if image is not None:
-            newDiceImage = scaleImage(image, 150, 150)
-            screen.blit(newDiceImage, (1100, 150))
-
+            newDiceImage = scaleImage(image, 120, 120)
+            screen.blit(newDiceImage, (1093, 170))
         pg.display.update()
 
-def makeMove(dice_num, position, color):
+def makeMove(dice_num, position, color, currentFigure):
     if color == "yellow":
         if position == hauser_list[0] or position == hauser_list[1] or position == hauser_list[2] or position == hauser_list[3]:
             if dice_num == 6:
@@ -396,7 +399,32 @@ def makeMove(dice_num, position, color):
                     position = field_list[counter]
                     break
 
+    is_position_occupied = False
+
+    for other_player, old_position in player_position.items():
+        if other_player != currentFigure and old_position == position:
+            fge1.setPosition(hauser_list[0]) if other_player == "fge1" else None
+            print(f"Das Feld ist bereits von {other_player} belegt!")
+            is_position_occupied = True
+            break
+
+    if not is_position_occupied:
+        player_position[currentFigure] = position
+        print("Perfekt, hier steht noch keiner")
+
     return position
+
+def winner(counter):
+    if player1.winner(yellowFigure_list) == True:
+        while True:
+            screen.fill("#fcce8d")
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    pg.quit()
+                    sys.exit()
+
+            pg.display.update()
+
 
 def rules():
     while True:
@@ -471,22 +499,22 @@ def rules():
         pg.display.update()
 
 def main_menu():
-    pg.display.set_caption("Menü")
-
+    pg.display.set_caption("Don't get ANGRY!")
+    BG = scaleImage(pg.image.load("assets/img.png"),1280,720 )
     while True:
         screen.blit(BG, (0,0))  #Background on the screen
 
         MENU_MOUSE_POS = pg.mouse.get_pos()
 
-        MENU_TEXT = get_font(100).render("MAIN MENU", True, "#b68f40")  # Textfield
+        MENU_TEXT = get_font(75).render("Don't get ANGRY!", True, "#856c4a")  # Textfield
         MENU_RECT = MENU_TEXT.get_rect(center=(640, 100))
 
-        PLAY_BUTTON = Button(image=pg.image.load("assets/Play_Rect.png"), pos=(640, 250),
-                             text_input="PLAY", font=get_font(75), base_color="#d7fcd4", hovering_color="White")
-        RULES_BUTTON = Button(image=pg.image.load("assets/Rules_Rect.png"), pos=(640, 400),
-                                text_input="Rules", font=get_font(75), base_color="#d7fcd4", hovering_color="White")
-        QUIT_BUTTON = Button(image=pg.image.load("assets/Quit_Rect.png"), pos=(640, 550),
-                             text_input="QUIT", font=get_font(75), base_color="#d7fcd4", hovering_color="White")
+        PLAY_BUTTON = Button(image=pg.image.load("assets/Play_Rect.png"), pos=(340, 270),
+                             text_input="PLAY", font=get_font(75), base_color="White", hovering_color="#fcce8d")
+        RULES_BUTTON = Button(image=scaleImage(pg.image.load("assets/Play_Rect.png"),430,109 ), pos=(340, 420),
+                                text_input="RULES", font=get_font(75), base_color="White", hovering_color="#fcce8d")
+        QUIT_BUTTON = Button(image=pg.image.load("assets/Play_Rect.png"), pos=(340, 570),
+                             text_input="QUIT", font=get_font(75), base_color="White", hovering_color="#fcce8d")
 
         screen.blit(MENU_TEXT, MENU_RECT)
 
@@ -514,6 +542,7 @@ fge1 = Figure(position=hauser_list[0], color="yellow")
 fge2 = Figure(position=hauser_list[1], color="yellow")
 fge3 = Figure(position=hauser_list[2], color="yellow")
 fge4 = Figure(position=hauser_list[3], color="yellow")
+yellowFigure_list = [0, 0, 0, 0]
 
 fgr1 = Figure(position=hauser_list[4], color="green")
 fgr2 = Figure(position=hauser_list[5], color="green")
@@ -529,6 +558,9 @@ fr1 = Figure(position=hauser_list[12], color="red")
 fr2 = Figure(position=hauser_list[13], color="red")
 fr3 = Figure(position=hauser_list[14], color="red")
 fr4 = Figure(position=hauser_list[15], color="red")
+
+# Create Player Objects
+player1 = Player("Horst", "yellow", yellowFigure_list)
 
 # Yellow Figures:
 FGE1_BUTTON = Button(image=pg.image.load("assets/figyellow.png"), pos=(hauser_list[0]), text_input="1", font=get_font(10),

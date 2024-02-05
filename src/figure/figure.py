@@ -3,19 +3,20 @@
 
 class Figure:
     def __init__(self, position, color):
-        self.postion = position
+        self.position = position
         self.color = color
+        self.counter = 0
 
-    def makeMove(self, dice_num):
-        self.position += dice_num
-        return self.postion
+    def movedFields(self, dice_num):
+        self.counter += dice_num
+        return self.counter
 
     def setPosition(self, currentPosition):
-        self.postion = currentPosition
+        self.position = currentPosition
     def getPosition(self):
-        return self.postion
+        return self.position
     def finish(self):
-        if self.postion >=41 and self.postion <= 44:
+        if self.counter >=41 and self.position <= 44:
             return True
         else:
             return False

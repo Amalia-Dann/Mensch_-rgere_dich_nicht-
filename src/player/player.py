@@ -1,7 +1,8 @@
 class Player:
-    def __init__(self, name, color):
+    def __init__(self, name, color, figure_list):
         self.name = name
         self.color = color
+        self.figure_list = figure_list
 
     def getName(self):
         return self.name
@@ -10,8 +11,7 @@ class Player:
         return self.color
 
     def getFigure(self):
-        figure_list = [0,0,0,0]
-        return figure_list
+        return self.figure_list
 
     def winner(self, figure_list):
         for i in range(4):
