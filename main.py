@@ -33,11 +33,6 @@ zielfelder_list = playground.finishFields()
 
 player_position = { }
 
-# Create moved Booleans:
-moved_fge1 = True
-moved_fge2 = True
-moved_fge3 = True
-moved_fge4 = True
 
 def get_font(size): # Returns Press-Start-2P in the desired size
     return pg.font.Font("assets/font.ttf", size)
@@ -201,7 +196,6 @@ def gameLoop(player_list):
     counter_fge1 = 0
 
     image = None
-    funktion_aufgerufen = False
 
 
     while True:
@@ -222,76 +216,89 @@ def gameLoop(player_list):
                 #Buttons for Yellow Figures 1-4
                 if FGE1_BUTTON.checkForInput(PLAY_MOUSE_POS):
                     currentPos = makeMove(dice_num, fge1.getPosition(), "yellow", "fge1")
+                    checkForOthers("fge1", currentPos)
                     FGE1_BUTTON.updatePosition(currentPos)
                     fge1.setPosition(currentPos)
-                    checkForOthers("fge1", currentPos)
-                    moved_fge1 = True
-                    yellowFigure_list[0] += dice_num
+                    #yellowFigure_list[0] += dice_num
                 if FGE2_BUTTON.checkForInput(PLAY_MOUSE_POS):
                     currentPos = makeMove(dice_num, fge2.getPosition(), "yellow", "fge2")
+                    checkForOthers("fge2", currentPos)
                     FGE2_BUTTON.updatePosition(currentPos)
                     fge2.setPosition(currentPos)
                 if FGE3_BUTTON.checkForInput(PLAY_MOUSE_POS):
                     currentPos = makeMove(dice_num, fge3.getPosition(), "yellow", "fge3")
+                    checkForOthers("fge3", currentPos)
                     FGE3_BUTTON.updatePosition(currentPos)
                     fge3.setPosition(currentPos)
                 if FGE4_BUTTON.checkForInput(PLAY_MOUSE_POS):
                     currentPos = makeMove(dice_num, fge4.getPosition(), "yellow", "fge4")
+                    checkForOthers("fge4", currentPos)
                     FGE4_BUTTON.updatePosition(currentPos)
                     fge4.setPosition(currentPos)
 
                 # Buttons for Green Figures 1-4
                 if FGR1_BUTTON.checkForInput(PLAY_MOUSE_POS):
                     currentPos = makeMove(dice_num, fgr1.getPosition(), "green", "fgr1")
+                    checkForOthers("fgr1", currentPos)
                     FGR1_BUTTON.updatePosition(currentPos)
                     fgr1.setPosition(currentPos)
                 if FGR2_BUTTON.checkForInput(PLAY_MOUSE_POS):
                     currentPos = makeMove(dice_num, fgr2.getPosition(), "green", "fgr2")
+                    checkForOthers("fgr2", currentPos)
                     FGR2_BUTTON.updatePosition(currentPos)
                     fgr2.setPosition(currentPos)
                 if FGR3_BUTTON.checkForInput(PLAY_MOUSE_POS):
                     currentPos = makeMove(dice_num, fgr3.getPosition(), "green", "fgr3")
+                    checkForOthers("fgr3", currentPos)
                     FGR3_BUTTON.updatePosition(currentPos)
                     fgr3.setPosition(currentPos)
                 if FGR4_BUTTON.checkForInput(PLAY_MOUSE_POS):
                     currentPos = makeMove(dice_num, fgr4.getPosition(), "green", "fgr4")
+                    checkForOthers("fgr4", currentPos)
                     FGR4_BUTTON.updatePosition(currentPos)
                     fgr4.setPosition(currentPos)
 
                 # Buttons for Blue Figures 1-4
                 if FB1_BUTTON.checkForInput(PLAY_MOUSE_POS):
                     currentPos = makeMove(dice_num, fb1.getPosition(), "blue", "fb1")
+                    checkForOthers("fb1", currentPos)
                     FB1_BUTTON.updatePosition(currentPos)
                     fb1.setPosition(currentPos)
                 if FB2_BUTTON.checkForInput(PLAY_MOUSE_POS):
                     currentPos = makeMove(dice_num, fb2.getPosition(), "blue", "fb2")
+                    checkForOthers("fb2", currentPos)
                     FB2_BUTTON.updatePosition(currentPos)
                     fb2.setPosition(currentPos)
                 if FB3_BUTTON.checkForInput(PLAY_MOUSE_POS):
                     currentPos = makeMove(dice_num, fb3.getPosition(), "blue", "fb3")
+                    checkForOthers("fb3", currentPos)
                     FB3_BUTTON.updatePosition(currentPos)
                     fb3.setPosition(currentPos)
                 if FB4_BUTTON.checkForInput(PLAY_MOUSE_POS):
                     currentPos = makeMove(dice_num, fb4.getPosition(), "blue", "fb4")
+                    checkForOthers("fb4", currentPos)
                     FB4_BUTTON.updatePosition(currentPos)
                     fb4.setPosition(currentPos)
 
                 # Buttons for Red Figures 1-4
                 if FR1_BUTTON.checkForInput(PLAY_MOUSE_POS):
                     currentPos = makeMove(dice_num, fr1.getPosition(), "red", "fr1")
+                    checkForOthers("fr1", currentPos)
                     FR1_BUTTON.updatePosition(currentPos)
                     fr1.setPosition(currentPos)
-                    checkForOthers("fr1", currentPos)
                 if FR2_BUTTON.checkForInput(PLAY_MOUSE_POS):
                     currentPos = makeMove(dice_num, fr2.getPosition(), "red", "fr2")
+                    checkForOthers("fr2", currentPos)
                     FR2_BUTTON.updatePosition(currentPos)
                     fr2.setPosition(currentPos)
                 if FR3_BUTTON.checkForInput(PLAY_MOUSE_POS):
                     currentPos = makeMove(dice_num, fr3.getPosition(), "red", "fr3")
+                    checkForOthers("fr3", currentPos)
                     FR3_BUTTON.updatePosition(currentPos)
                     fr3.setPosition(currentPos)
                 if FR4_BUTTON.checkForInput(PLAY_MOUSE_POS):
                     currentPos = makeMove(dice_num, fr4.getPosition(), "red", "fr4")
+                    checkForOthers("fr4", currentPos)
                     FR4_BUTTON.updatePosition(currentPos)
                     fr4.setPosition(currentPos)
 
@@ -308,9 +315,7 @@ def gameLoop(player_list):
         DICE_BUTTON.changeColor(PLAY_MOUSE_POS)
         DICE_BUTTON.update(screen)
 
-        if not funktion_aufgerufen:
-            updateFigureButtons(PLAY_MOUSE_POS)
-            funktion_aufgerufen = True
+        updateFigureButtons(PLAY_MOUSE_POS)
 
         if image is not None:
             newDiceImage = scaleImage(image, 120, 120)
@@ -375,8 +380,58 @@ def checkForOthers(player_name, new_position):
         if other_player != player_name and position == new_position:
             print(f"Das Feld {new_position} ist bereits von {other_player} belegt!")
             player_position[other_player] = hauser_list[0]
-            fge1.setPosition(hauser_list[0]) if other_player == "fge1" else None
-            fr1.setPosition(hauser_list[0]) if other_player == "fr1" else None
+            if other_player == "fge1":
+                fge1.setPosition(hauser_list[0])
+                FGE1_BUTTON.updatePosition(hauser_list[0])
+            if other_player == "fge2":
+                fge2.setPosition(hauser_list[1])
+                FGE2_BUTTON.updatePosition(hauser_list[1])
+            if other_player == "fge3":
+                fge3.setPosition(hauser_list[2])
+                FGE3_BUTTON.updatePosition(hauser_list[2])
+            if other_player == "fge4":
+                fge4.setPosition(hauser_list[3])
+                FGE4_BUTTON.updatePosition(hauser_list[3])
+
+            if other_player == "fr1":
+                fr1.setPosition(hauser_list[12])
+                FR1_BUTTON.updatePosition(hauser_list[12])
+            if other_player == "fr2":
+                fr2.setPosition(hauser_list[13])
+                FR2_BUTTON.updatePosition(hauser_list[13])
+            if other_player == "fr3":
+                fr3.setPosition(hauser_list[14])
+                FR3_BUTTON.updatePosition(hauser_list[14])
+            if other_player == "fr4":
+                fr4.setPosition(hauser_list[15])
+                FR4_BUTTON.updatePosition(hauser_list[15])
+
+            if other_player == "fb1":
+                fb1.setPosition(hauser_list[8])
+                FB1_BUTTON.updatePosition(hauser_list[8])
+            if other_player == "fb2":
+                fb2.setPosition(hauser_list[9])
+                FB2_BUTTON.updatePosition(hauser_list[9])
+            if other_player == "fb3":
+                fb3.setPosition(hauser_list[10])
+                FB3_BUTTON.updatePosition(hauser_list[10])
+            if other_player == "fb4":
+                fb4.setPosition(hauser_list[11])
+                FB4_BUTTON.updatePosition(hauser_list[11])
+
+            if other_player == "fgr1":
+                fgr1.setPosition(hauser_list[4])
+                FGR1_BUTTON.updatePosition(hauser_list[4])
+            if other_player == "fgr2":
+                fgr2.setPosition(hauser_list[5])
+                FGR2_BUTTON.updatePosition(hauser_list[5])
+            if other_player == "fgr3":
+                fgr3.setPosition(hauser_list[6])
+                FGR3_BUTTON.updatePosition(hauser_list[6])
+            if other_player == "fgr4":
+                fgr4.setPosition(hauser_list[7])
+                FGR4_BUTTON.updatePosition(hauser_list[7])
+
             break
 
     # Aktualisiere die Position des aktuellen Spielers
