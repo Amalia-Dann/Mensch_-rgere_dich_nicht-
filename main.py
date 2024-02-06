@@ -33,6 +33,12 @@ zielfelder_list = playground.finishFields()
 
 player_position = { }
 
+# Create moved Booleans:
+moved_fge1 = True
+moved_fge2 = True
+moved_fge3 = True
+moved_fge4 = True
+
 def get_font(size): # Returns Press-Start-2P in the desired size
     return pg.font.Font("assets/font.ttf", size)
 
@@ -195,6 +201,8 @@ def gameLoop(player_list):
     counter_fge1 = 0
 
     image = None
+    funktion_aufgerufen = False
+
 
     while True:
         PLAY_MOUSE_POS = pg.mouse.get_pos()
@@ -216,6 +224,8 @@ def gameLoop(player_list):
                     currentPos = makeMove(dice_num, fge1.getPosition(), "yellow", "fge1")
                     FGE1_BUTTON.updatePosition(currentPos)
                     fge1.setPosition(currentPos)
+                    checkForOthers("fge1", currentPos)
+                    moved_fge1 = True
                     yellowFigure_list[0] += dice_num
                 if FGE2_BUTTON.checkForInput(PLAY_MOUSE_POS):
                     currentPos = makeMove(dice_num, fge2.getPosition(), "yellow", "fge2")
@@ -271,6 +281,7 @@ def gameLoop(player_list):
                     currentPos = makeMove(dice_num, fr1.getPosition(), "red", "fr1")
                     FR1_BUTTON.updatePosition(currentPos)
                     fr1.setPosition(currentPos)
+                    checkForOthers("fr1", currentPos)
                 if FR2_BUTTON.checkForInput(PLAY_MOUSE_POS):
                     currentPos = makeMove(dice_num, fr2.getPosition(), "red", "fr2")
                     FR2_BUTTON.updatePosition(currentPos)
@@ -297,46 +308,79 @@ def gameLoop(player_list):
         DICE_BUTTON.changeColor(PLAY_MOUSE_POS)
         DICE_BUTTON.update(screen)
 
-        FGE1_BUTTON.update(screen)
-        FGE1_BUTTON.changeColor(PLAY_MOUSE_POS)
-        FGE2_BUTTON.update(screen)
-        FGE2_BUTTON.changeColor(PLAY_MOUSE_POS)
-        FGE3_BUTTON.update(screen)
-        FGE3_BUTTON.changeColor(PLAY_MOUSE_POS)
-        FGE4_BUTTON.update(screen)
-        FGE4_BUTTON.changeColor(PLAY_MOUSE_POS)
-
-        FGR1_BUTTON.update(screen)
-        FGR1_BUTTON.changeColor(PLAY_MOUSE_POS)
-        FGR2_BUTTON.update(screen)
-        FGR2_BUTTON.changeColor(PLAY_MOUSE_POS)
-        FGR3_BUTTON.update(screen)
-        FGR3_BUTTON.changeColor(PLAY_MOUSE_POS)
-        FGR4_BUTTON.update(screen)
-        FGR4_BUTTON.changeColor(PLAY_MOUSE_POS)
-
-        FR1_BUTTON.update(screen)
-        FR1_BUTTON.changeColor(PLAY_MOUSE_POS)
-        FR2_BUTTON.update(screen)
-        FR2_BUTTON.changeColor(PLAY_MOUSE_POS)
-        FR3_BUTTON.update(screen)
-        FR3_BUTTON.changeColor(PLAY_MOUSE_POS)
-        FR4_BUTTON.update(screen)
-        FR4_BUTTON.changeColor(PLAY_MOUSE_POS)
-
-        FB1_BUTTON.update(screen)
-        FB1_BUTTON.changeColor(PLAY_MOUSE_POS)
-        FB2_BUTTON.update(screen)
-        FB2_BUTTON.changeColor(PLAY_MOUSE_POS)
-        FB3_BUTTON.update(screen)
-        FB3_BUTTON.changeColor(PLAY_MOUSE_POS)
-        FB4_BUTTON.update(screen)
-        FB4_BUTTON.changeColor(PLAY_MOUSE_POS)
+        if not funktion_aufgerufen:
+            updateFigureButtons(PLAY_MOUSE_POS)
+            funktion_aufgerufen = True
 
         if image is not None:
             newDiceImage = scaleImage(image, 120, 120)
             screen.blit(newDiceImage, (1093, 170))
         pg.display.update()
+
+
+def updateFigureButtons(PLAY_MOUSE_POS):
+    global moved_fge1 , moved_fge2, moved_fge3, moved_fge4
+    global moved_fgr1, moved_fgr2, moved_fgr3, moved_fgr4
+    global moved_fb1, moved_fb2, moved_fb3, moved_fb4
+    global moved_fr1, moved_fr2, moved_fr3, moved_fr4
+
+    if moved_fge1:
+        FGE1_BUTTON.update(screen)
+        FGE1_BUTTON.changeColor(PLAY_MOUSE_POS)
+        #moved_fge1 = False
+    elif moved_fge2:
+        FGE2_BUTTON.update(screen)
+        FGE2_BUTTON.changeColor(PLAY_MOUSE_POS)
+        #moved_fge2 = False
+    elif moved_fge3:
+        FGE3_BUTTON.update(screen)
+        FGE3_BUTTON.changeColor(PLAY_MOUSE_POS)
+        #moved_fge3 = False
+    elif moved_fge4:
+        FGE4_BUTTON.update(screen)
+        FGE4_BUTTON.changeColor(PLAY_MOUSE_POS)
+        #moved_fge4 = False
+
+
+    FGR1_BUTTON.update(screen)
+    FGR1_BUTTON.changeColor(PLAY_MOUSE_POS)
+    FGR2_BUTTON.update(screen)
+    FGR2_BUTTON.changeColor(PLAY_MOUSE_POS)
+    FGR3_BUTTON.update(screen)
+    FGR3_BUTTON.changeColor(PLAY_MOUSE_POS)
+    FGR4_BUTTON.update(screen)
+    FGR4_BUTTON.changeColor(PLAY_MOUSE_POS)
+
+    FR1_BUTTON.update(screen)
+    FR1_BUTTON.changeColor(PLAY_MOUSE_POS)
+    FR2_BUTTON.update(screen)
+    FR2_BUTTON.changeColor(PLAY_MOUSE_POS)
+    FR3_BUTTON.update(screen)
+    FR3_BUTTON.changeColor(PLAY_MOUSE_POS)
+    FR4_BUTTON.update(screen)
+    FR4_BUTTON.changeColor(PLAY_MOUSE_POS)
+
+    FB1_BUTTON.update(screen)
+    FB1_BUTTON.changeColor(PLAY_MOUSE_POS)
+    FB2_BUTTON.update(screen)
+    FB2_BUTTON.changeColor(PLAY_MOUSE_POS)
+    FB3_BUTTON.update(screen)
+    FB3_BUTTON.changeColor(PLAY_MOUSE_POS)
+    FB4_BUTTON.update(screen)
+    FB4_BUTTON.changeColor(PLAY_MOUSE_POS)
+
+def checkForOthers(player_name, new_position):
+    # Überprüfen, ob das neue Feld bereits von einem anderen Spieler belegt ist
+    for other_player, position in player_position.items():
+        if other_player != player_name and position == new_position:
+            print(f"Das Feld {new_position} ist bereits von {other_player} belegt!")
+            player_position[other_player] = hauser_list[0]
+            fge1.setPosition(hauser_list[0]) if other_player == "fge1" else None
+            fr1.setPosition(hauser_list[0]) if other_player == "fr1" else None
+            break
+
+    # Aktualisiere die Position des aktuellen Spielers
+    player_position[player_name] = new_position
 
 def makeMove(dice_num, position, color, currentFigure):
     if color == "yellow":
@@ -399,19 +443,7 @@ def makeMove(dice_num, position, color, currentFigure):
                     position = field_list[counter]
                     break
 
-    is_position_occupied = False
-
-    for other_player, old_position in player_position.items():
-        if other_player != currentFigure and old_position == position:
-            fge1.setPosition(hauser_list[0]) if other_player == "fge1" else None
-            print(f"Das Feld ist bereits von {other_player} belegt!")
-            is_position_occupied = True
-            break
-
-    if not is_position_occupied:
-        player_position[currentFigure] = position
-        print("Perfekt, hier steht noch keiner")
-
+    #checkForOthers(currentFigure, position)
     return position
 
 def winner(counter):
@@ -557,6 +589,8 @@ fr1 = Figure(position=hauser_list[12], color="red")
 fr2 = Figure(position=hauser_list[13], color="red")
 fr3 = Figure(position=hauser_list[14], color="red")
 fr4 = Figure(position=hauser_list[15], color="red")
+
+
 
 # Create Player Objects
 player1 = Player("Horst", "yellow", yellowFigure_list)
