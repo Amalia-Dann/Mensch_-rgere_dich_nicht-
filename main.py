@@ -324,28 +324,14 @@ def gameLoop(player_list):
 
 
 def updateFigureButtons(PLAY_MOUSE_POS):
-    global moved_fge1 , moved_fge2, moved_fge3, moved_fge4
-    global moved_fgr1, moved_fgr2, moved_fgr3, moved_fgr4
-    global moved_fb1, moved_fb2, moved_fb3, moved_fb4
-    global moved_fr1, moved_fr2, moved_fr3, moved_fr4
-
-    if moved_fge1:
-        FGE1_BUTTON.update(screen)
-        FGE1_BUTTON.changeColor(PLAY_MOUSE_POS)
-        #moved_fge1 = False
-    elif moved_fge2:
-        FGE2_BUTTON.update(screen)
-        FGE2_BUTTON.changeColor(PLAY_MOUSE_POS)
-        #moved_fge2 = False
-    elif moved_fge3:
-        FGE3_BUTTON.update(screen)
-        FGE3_BUTTON.changeColor(PLAY_MOUSE_POS)
-        #moved_fge3 = False
-    elif moved_fge4:
-        FGE4_BUTTON.update(screen)
-        FGE4_BUTTON.changeColor(PLAY_MOUSE_POS)
-        #moved_fge4 = False
-
+    FGE1_BUTTON.update(screen)
+    FGE1_BUTTON.changeColor(PLAY_MOUSE_POS)
+    FGE2_BUTTON.update(screen)
+    FGE2_BUTTON.changeColor(PLAY_MOUSE_POS)
+    FGE3_BUTTON.update(screen)
+    FGE3_BUTTON.changeColor(PLAY_MOUSE_POS)
+    FGE4_BUTTON.update(screen)
+    FGE4_BUTTON.changeColor(PLAY_MOUSE_POS)
 
     FGR1_BUTTON.update(screen)
     FGR1_BUTTON.changeColor(PLAY_MOUSE_POS)
@@ -586,7 +572,7 @@ def rules():
 
 def main_menu():
     pg.display.set_caption("Don't get ANGRY!")
-    BG = scaleImage(pg.image.load("assets/img.png"),1280,720 )
+    BG = scaleImage(pg.image.load("assets/mainscreen.png"), 1280, 720)
     while True:
         screen.blit(BG, (0,0))  #Background on the screen
 

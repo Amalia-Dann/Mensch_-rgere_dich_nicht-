@@ -1,21 +1,9 @@
-from random import random
-
-
 class GameField:
-    # Koordinaten der Felder
-    # Koordinaten der Figuren
-    # figurbewegen
-    # figurschlagen
-    # startpositon --> Koordinaten setzen
-    # hat gewonnen
-
     def __init__(self):
         self.field_list = self.fields()
-        #self.figure_list = figures
-        #self.dice = dice
 
     def fields(self):
-        # Koordinaten für Felder
+        # Initializing the fields
 
         # Felder 1-5 (Startfeld gelb --> hoch)
         f1 = [577, 660] # gelbes Startfeld
