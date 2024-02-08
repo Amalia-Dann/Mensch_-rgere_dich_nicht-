@@ -11,11 +11,13 @@ class Figure:
     def setPosition(self, currentPosition):
         self.position = currentPosition
 
+    # gets the current position of the figure
     def getPosition(self):
         return self.position
 
+    # checks whether the figure has entered the target-fields
     def finish(self):
         if self.counter >=41 and self.position <= 44:
             return True
         else:
-            return False
+            return False # if the figure overshoots the target, it must remain stationary

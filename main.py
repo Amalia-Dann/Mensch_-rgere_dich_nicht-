@@ -84,7 +84,7 @@ def play():
                          base_color = "Black", hovering_color = "WHITE")
 
     # Text für Spieler-Aufforderung
-    prompt_text = "Press Enter, to add a player"
+    prompt_text = ("Press Enter, to add a player")
     prompt_rect = pg.Rect(20, 50, 200, 40)
 
     # Eingabefeld
@@ -116,7 +116,7 @@ def play():
                 if event.key == pg.K_RETURN:
                     if not cursor_active:
                         cursor_active = True
-                        prompt_text = "Spieler Namen eingeben"
+                        prompt_text = "Enter player name"
                     else:
                         for i in range(len(saved_name_texts)):
                             if not saved_name_texts[i] and input_text:
@@ -125,9 +125,9 @@ def play():
                                 cursor_timer = 0
                                 if i == max_players - 1:
                                     cursor_active = False
-                                    prompt_text = "Alle Spieler eingetragen"
+                                    prompt_text = "All players registered"
                                 else:
-                                    prompt_text = "Spieler Namen eingeben"
+                                    prompt_text = "Enter player name"
                                 break
                 elif cursor_active:
                     if event.key == pg.K_BACKSPACE:
@@ -177,6 +177,7 @@ def play():
                 pg.draw.rect(screen, "#fcce8d", saved_name_rects[i], 2)
                 saved_name_surface = font.render(saved_name_texts[i], True, black)
                 screen.blit(saved_name_surface, (saved_name_rects[i].x + 5, saved_name_rects[i].y + 5))
+
 
         pg.display.update()
 
@@ -317,6 +318,11 @@ def gameLoop(player_list):
 
         updateFigureButtons(PLAY_MOUSE_POS)
 
+        name1_BUTTON.update(screen)
+        name2_BUTTON.update(screen)
+        name3_BUTTON.update(screen)
+        name4_BUTTON.update(screen)
+
         if image is not None:
             newDiceImage = scaleImage(image, 120, 120)
             screen.blit(newDiceImage, (1093, 170))
@@ -364,7 +370,7 @@ def checkForOthers(player_name, new_position):
     # Überprüfen, ob das neue Feld bereits von einem anderen Spieler belegt ist
     for other_player, position in player_position.items():
         if other_player != player_name and position == new_position:
-            print(f"Das Feld {new_position} ist bereits von {other_player} belegt!")
+            print(f"The field {new_position} is already occupied by {other_player} !")
             player_position[other_player] = hauser_list[0]
             if other_player == "fge1":
                 fge1.setPosition(hauser_list[0])
