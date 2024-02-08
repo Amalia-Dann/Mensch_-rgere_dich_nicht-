@@ -2,12 +2,21 @@ class Figure:
     def __init__(self, position, color):
         self.position = position
         self.color = color
-        self.counter = 0
-        self.moved = True
+        self.counter = -6
 
-    def moved(self):
-        return self.moved
+    # resetting the counter to 0
+    def resetMoved(self):
+        self.counter = -6
 
+    # add the current number of dice to the counter
+    def setMoved(self, dice_num):
+        self.counter += dice_num
+
+    # returns the number of the counter
+    def getMoved(self):
+        return self.counter
+
+    # sets the position of the current figure
     def setPosition(self, currentPosition):
         self.position = currentPosition
 
@@ -17,7 +26,7 @@ class Figure:
 
     # checks whether the figure has entered the target-fields
     def finish(self):
-        if self.counter >=41 and self.position <= 44:
+        if self.counter >=40 and self.counter <= 43:
             return True
         else:
             return False # if the figure overshoots the target, it must remain stationary
