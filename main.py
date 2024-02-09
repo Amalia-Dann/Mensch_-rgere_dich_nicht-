@@ -12,16 +12,11 @@ pg.init()
 screen = pg.display.set_mode((1280,720))
 pg.display.set_caption("Don't get ANGRY!")
 
-
 clock = pg.time.Clock()
 
 # colors
 white = (255, 255, 255)
 black = (0, 0, 0)
-gray = (200, 200, 200)
-blue = (0, 128, 255)
-
-
 
 #create Object
 playground = GameField()
@@ -31,7 +26,6 @@ zielfelder_list = playground.finishFields()
 
 player_position = { }
 saved_name_rects = []
-
 
 def get_font(size): # Returns Press-Start-2P in the desired size
     return pg.font.Font("assets/font.ttf", size)
@@ -54,61 +48,70 @@ def scaleImage(image, newWidth, newHeight):
     vergrößertes_bild = pg.transform.scale(image, (newWidth, newHeight))
     return vergrößertes_bild
 
-def imageNumOfPoints(dice_num):
-    if dice_num == 1:
-        diceImage = pg.image.load("assets/Augenzahl1.png")
-        return diceImage
-    if dice_num == 2:
-        diceImage = pg.image.load("assets/Augenzahl2.png")
-        return diceImage
-    if dice_num == 3:
-        diceImage = pg.image.load("assets/Augenzahl3.png")
-        return diceImage
-    if dice_num == 4:
-        diceImage = pg.image.load("assets/Augenzahl4.png")
-        return diceImage
-    if dice_num == 5:
-        diceImage = pg.image.load("assets/Augenzahl5.png")
-        return diceImage
-    if dice_num == 6:
-        diceImage = pg.image.load("assets/Augenzahl6.png")
-        return diceImage
+        # Create a button for returning to the main menu.
+        RULES_BACK = Button(image=None, pos=(1200, 690),
+                              text_input="BACK", font=get_font(20), base_color="Black", hovering_color="White")
+
+        # Event handling loop.
+        for event in pg.event.get():
+            # Quit the game if the window is closed.
+            if event.type == pg.QUIT:
+                pg.quit()
+                sys.exit()
+            if event.type == pg.MOUSEBUTTONDOWN:
+                # Check if the back button is clicked and return to the main menu if clicked.
+                if RULES_BACK.checkForInput(OPTIONS_MOUSE_POS):
+                    main_menu()
+
+        # Update and render the back button.
+        RULES_BACK.changeColor(OPTIONS_MOUSE_POS)
+        RULES_BACK.update(screen)
+
+        pg.display.update() # Update the display.
+
+# This function represents the game's main menu where players can enter their names and start the game.
 def play():
+    # Set the window title
     pg.display.set_caption("Don't get ANGRY!")
+
+    # Define background color
     background_color = "#fcce8d"
+
+    # Load game field image and scale it to fit the screen
     gamefield = pg.image.load("assets/gamefield.png")
     gamefield, gamefield_rect = transform_scale_keep_ratio(gamefield, screen.get_size())
 
+    # Define buttons for going back to the main menu and starting the game
     PLAY_BACK = Button(image=None, pos=(1165, 670),
                        text_input="BACK", font=get_font(30), base_color="Black", hovering_color="WHITE")
 
+    GAME_ACTIVE = Button(image=None, pos=(135, 670), text_input="START", font=get_font(30),
+                         base_color="Black", hovering_color="WHITE")
 
-    GAME_ACTIVE = Button(image = None, pos = (135, 670), text_input = "START", font = get_font(30),
-                         base_color = "Black", hovering_color = "WHITE")
-
-    # Text für Spieler-Aufforderung
+    # Text prompting the player to enter names
     prompt_text = ("Press Enter, to add a player")
     prompt_rect = pg.Rect(20, 50, 200, 40)
 
-    # Eingabefeld
+    # Input field parameters
     input_rect = pg.Rect(20, 100, 200, 40)
     input_text = ""
     cursor_active = False
-    cursor_timer = 0  # Timer für den Cursor-Blinkeffekt
+    cursor_timer = 0  # Timer for cursor blink effect
+    cursor_size = 2  # Size of the cursor
 
-    # Größe des Cursors
-    cursor_size = 2
-
-    # Gespeicherte Namen
+    # Saved player names
     max_players = 4
     saved_name_rects = [pg.Rect(20, 190 + i * 80, 200, 40) for i in range(max_players)]
     saved_name_texts = [""] * max_players
 
-
+    # Variable for storing the background image
     image = None
+
+    # Flag indicating whether the game is active
     active_play = False
 
     while True:
+        # Get the current mouse position
         PLAY_MOUSE_POS = pg.mouse.get_pos()
 
         for event in pg.event.get():
@@ -117,6 +120,7 @@ def play():
                 sys.exit()
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_RETURN:
+                    # Add player name when Enter is pressed
                     if not cursor_active:
                         cursor_active = True
                         prompt_text = "Enter player name"
@@ -133,56 +137,86 @@ def play():
                                     prompt_text = "Enter player name"
                                 break
                 elif cursor_active:
+                    # Handle input when cursor is active
                     if event.key == pg.K_BACKSPACE:
                         input_text = input_text[:-1]
                     else:
                         input_text += event.unicode
             if event.type == pg.MOUSEBUTTONDOWN:
+                # Check for button clicks
                 if PLAY_BACK.checkForInput(PLAY_MOUSE_POS):
                     main_menu()
                 if GAME_ACTIVE.checkForInput(PLAY_MOUSE_POS):
                     gameLoop(saved_name_texts)
             elif event.type == pg.VIDEORESIZE:
+                # Resize the window and game field image
                 window = pg.display.set_mode(event.size, pg.RESIZABLE)
                 gamefield, gamefield_rect = transform_scale_keep_ratio(gamefield, window.get_size())
 
+        # Fill the screen with background color
         screen.fill(background_color)
+        # Draw the game field image
         screen.blit(gamefield, gamefield_rect)
 
+        # Update and draw the back button
         PLAY_BACK.changeColor(PLAY_MOUSE_POS)
         PLAY_BACK.update(screen)
 
+        # Update and draw the start button
         GAME_ACTIVE.changeColor(PLAY_MOUSE_POS)
         GAME_ACTIVE.update(screen)
 
-        # Spieler-Aufforderung anzeigen
+        # Display prompt text
         prompt_surface = font.render(prompt_text, True, black)
         screen.blit(prompt_surface, (prompt_rect.x + 5, prompt_rect.y + 5))
 
-        # Eingabefeld zeichnen, wenn aktiv
+        # Draw input field if active
         if cursor_active:
             pg.draw.rect(screen, white, input_rect)
             pg.draw.rect(screen, black, input_rect, 2)
             input_surface = input_font.render(input_text, True, black)
             screen.blit(input_surface, (input_rect.x + 5, input_rect.y + 5))
 
-            # Cursor-Blinkeffekt
+            # Cursor blink effect
             if pg.time.get_ticks() % 1000 < 500:
                 cursor_height = input_surface.get_height()
                 cursor_rect = pg.Rect(input_rect.x + 5 + input_surface.get_width(), input_rect.y + 5, cursor_size,
                                       cursor_height)
                 pg.draw.rect(screen, black, cursor_rect)
 
-        # Gespeicherte Namen anzeigen
+        # Display saved player names
         for i in range(len(saved_name_texts)):
             if saved_name_texts[i]:
-                pg.draw.rect(screen,"#fcce8d" , saved_name_rects[i])
+                pg.draw.rect(screen, "#fcce8d", saved_name_rects[i])
                 pg.draw.rect(screen, "#fcce8d", saved_name_rects[i], 2)
                 saved_name_surface = font.render(saved_name_texts[i], True, "#856c4a")
                 screen.blit(saved_name_surface, (saved_name_rects[i].x + 5, saved_name_rects[i].y + 5))
 
-
+        # Update the display
         pg.display.update()
+
+
+# This function returns the image corresponding to the given dice number.
+def imageNumOfPoints(dice_num):
+    # Load the image based on the dice number.
+    if dice_num == 1:
+        diceImage = pg.image.load("assets/Augenzahl1.png")
+    elif dice_num == 2:
+        diceImage = pg.image.load("assets/Augenzahl2.png")
+    elif dice_num == 3:
+        diceImage = pg.image.load("assets/Augenzahl3.png")
+    elif dice_num == 4:
+        diceImage = pg.image.load("assets/Augenzahl4.png")
+    elif dice_num == 5:
+        diceImage = pg.image.load("assets/Augenzahl5.png")
+    elif dice_num == 6:
+        diceImage = pg.image.load("assets/Augenzahl6.png")
+    else:
+        # If the dice number is not valid, return None.
+        diceImage = None
+
+    return diceImage
+
 
 
 def gameLoop(player_list):
@@ -727,117 +761,9 @@ def winner(winPlayer):
                     pg.quit()
                     sys.exit()
 
-            QUIT_BUTTON.changeColor(ENDSCREEN_MOUSE_POS)
-            QUIT_BUTTON.update(screen)
-
-        pg.display.update()
-
-
-def rules():
-    while True:
-        OPTIONS_MOUSE_POS = pg.mouse.get_pos()
-
-        screen.fill("#fcce8d")
-        schrift = get_font(25)
-
-        def draw_text(text):
-            font = get_font(12)
-            y_pos = 15
-            x_pos = 20
-
-            for line in text.splitlines():
-                rendered_line = font.render(line, 1, (0, 0, 0))
-                screen.blit(rendered_line, (x_pos, y_pos))
-
-                # Aktualisiere die y-Position für die nächste Zeile
-                y_pos += 21
-
-        if __name__ == "__main__":
-            text_to_display = (
-                "Your pieces always start in the starting circle and are moved in the direction of the arrow \n"
-                "towards the finish. \n"
-                "On your turn, you roll the dice and can move your figure according to the result of the dice, \n"
-                "beginning with the starting figure. \n"
-                "Then it is the next player's turn. \n\n"
-                "During the course of the game, you may roll a number that could theoretically place you on a \n"
-                "square that is already occupied. \n"
-                "Place your piece on this square to beat your opponent. \n"
-                "They will have to place it back in the starting circle and will be moved one step backwards. \n\n"
-                "If one of you rolls a 6, he gets another roll and has to bring another piece from the starting \n"
-                "circle into play and use the second free roll to \n"
-                "place it further, according to the eyes. \n"
-                "If, on the other hand, you roll a 5, for example, you must move another piece. \n"
-                "If you roll a 6, but have already moved all 4 pieces, or have already partially reached the goal, \n"
-                "you can move any piece 6 spaces further. \n"
-                "He then has one more free roll. If you have no other piece on the square, you must roll a 6. \n"
-                "If you fail to do so, you must discard the die. \n"
-                "The player jumps over their own and enemy pieces standing in the way, but the occupied square \n"
-                "is also counted. \n\n"
-                "Once a piece has completely circled the outer cross, it moves onto the circles of its color \n"
-                "to the finish line. \n"
-                "To reach the goal, a number must be rolled that moves the piece to any square within the goal. \n"
-                "If you roll a number above this, \n"
-                "you must discard the die. \n\n"
-                "Goal: \n"
-                "The first player to get their 4 pieces to the finish line wins. \n"
-                "The others can decide for themselves whether the game ends or whether they still want to play \n"
-                "for the lower places")
-            draw_text(text_to_display)
-
-        RULES_BACK = Button(image=None, pos=(1200, 690),
-                              text_input="BACK", font=get_font(20), base_color="Black", hovering_color="White")
-
-        for event in pg.event.get():
-            if event.type == pg.QUIT:
-                pg.quit()
-                sys.exit()
-            if event.type == pg.MOUSEBUTTONDOWN:
-                if RULES_BACK.checkForInput(OPTIONS_MOUSE_POS):
-                    main_menu()
-
-        RULES_BACK.changeColor(OPTIONS_MOUSE_POS)
-        RULES_BACK.update(screen)
-
-        pg.display.update()
-
-def main_menu():
-    pg.display.set_caption("Don't get ANGRY!")
-    BG = scaleImage(pg.image.load("assets/mainscreen.png"), 1280, 720)
-    while True:
-        screen.blit(BG, (0,0))  #Background on the screen
-
-        MENU_MOUSE_POS = pg.mouse.get_pos()
-
-        MENU_TEXT = get_font(75).render("Don't get ANGRY!", True, "#856c4a")  # Textfield
-        MENU_RECT = MENU_TEXT.get_rect(center=(640, 100))
-
-        PLAY_BUTTON = Button(image=pg.image.load("assets/Play_Rect.png"), pos=(340, 270),
-                             text_input="PLAY", font=get_font(75), base_color="White", hovering_color="#fcce8d")
-        RULES_BUTTON = Button(image=scaleImage(pg.image.load("assets/Play_Rect.png"),430,109 ), pos=(340, 420),
-                                text_input="RULES", font=get_font(75), base_color="White", hovering_color="#fcce8d")
-        QUIT_BUTTON = Button(image=pg.image.load("assets/Play_Rect.png"), pos=(340, 570),
-                             text_input="QUIT", font=get_font(75), base_color="White", hovering_color="#fcce8d")
-
-        screen.blit(MENU_TEXT, MENU_RECT)
-
-        for button in [PLAY_BUTTON, RULES_BUTTON, QUIT_BUTTON]:
-            button.changeColor(MENU_MOUSE_POS)
-            button.update(screen)
-
-        for event in pg.event.get():
-            if event.type == pg.QUIT:
-                pg.quit()
-                sys.exit()
-            if event.type == pg.MOUSEBUTTONDOWN:
-                if PLAY_BUTTON.checkForInput(MENU_MOUSE_POS):
-                    play()  #run play function
-                if RULES_BUTTON.checkForInput(MENU_MOUSE_POS):
-                    rules() #run options function
-                if QUIT_BUTTON.checkForInput(MENU_MOUSE_POS):
-                    pg.quit()
-                    sys.exit()
-
-        pg.display.update()
+        # Update and render the quit button.
+        QUIT_BUTTON.changeColor(ENDSCREEN_MOUSE_POS)
+        QUIT_BUTTON.update(screen)
 
 # Create Figure-Objects
 fge1 = Figure(position=hauser_list[0], color="yellow")
