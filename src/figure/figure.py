@@ -2,7 +2,7 @@ class Figure:
     def __init__(self, position, color):
         self.position = position
         self.color = color
-        self.counter = -6
+        self.counter = -6   #with a six you come out of the house
 
     # resetting the counter to 0
     def resetMoved(self):

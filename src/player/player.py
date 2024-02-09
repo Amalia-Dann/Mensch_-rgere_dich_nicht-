@@ -13,6 +13,9 @@ class Player:
     def getName(self):
         return self.name
 
+    def setColor(self, newColor):
+        self.color = newColor
+
     # getting and returning the color
     def getColor(self):
         return self.color
