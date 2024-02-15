@@ -1,4 +1,8 @@
 class Player:
+    # Class Player represents a player in the game, characterized by a name and color. It contains methods for initializing the player,
+    # setting and retrieving the player's name and color, managing a list of figures on target fields, determining if the player has won
+    # by having all figures on target fields.
+
     # initializing the player
     def __init__(self, name, color):
         self.name = name

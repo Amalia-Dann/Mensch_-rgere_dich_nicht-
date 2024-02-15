@@ -1,4 +1,9 @@
 class GameField:
+    # Class GameField defines the game board layout, including the positions of regular fields, houses, and target fields.
+    # It initializes these elements and provides methods for accessing their coordinates, defining starting positions for
+    # players of different colors, and managing the layout of the game board.
+
+    # initializing the gameField
     def __init__(self):
         self.fieldList = self.fields()
 
@@ -140,10 +145,10 @@ class GameField:
     # defining the starting fields of the colors
     def startPosition(self, color):
         if color == "yellow":
-            return self.field_list[0]
+            return self.fieldList[0]
         elif color == "green":
-            return self.field_list[10]
+            return self.fieldList[10]
         elif color == "blue":
-            return self.field_list[20]
+            return self.fieldList[20]
         elif color == "red":
-            return self.field_list[30]
+            return self.fieldList[30]

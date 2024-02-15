@@ -1,4 +1,9 @@
 class Figure:
+    #Class Figure represents a game figure with position and color attributes. It includes methods for initializing the figure's position and color,
+    #resetting its movement counter, updating the movement counter based on dice rolls, getting the current position and movement counter, setting the
+    #position of the figure, and determining if the figure has reached the target fields.
+
+    # initializing the figure
     def __init__(self, position, color):
         self.position = position
         self.color = color

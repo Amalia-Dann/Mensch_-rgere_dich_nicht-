@@ -309,19 +309,19 @@ def play():
 
 
 # This function returns the image corresponding to the given dice number.
-def imageNumOfPoints(dice_num):
+def imageNumOfPoints(diceNum):
     # Load the image based on the dice number.
-    if dice_num == 1:
+    if diceNum == 1:
         diceImage = pg.image.load("assets/Augenzahl1.png")
-    elif dice_num == 2:
+    elif diceNum == 2:
         diceImage = pg.image.load("assets/Augenzahl2.png")
-    elif dice_num == 3:
+    elif diceNum == 3:
         diceImage = pg.image.load("assets/Augenzahl3.png")
-    elif dice_num == 4:
+    elif diceNum == 4:
         diceImage = pg.image.load("assets/Augenzahl4.png")
-    elif dice_num == 5:
+    elif diceNum == 5:
         diceImage = pg.image.load("assets/Augenzahl5.png")
-    elif dice_num == 6:
+    elif diceNum == 6:
         diceImage = pg.image.load("assets/Augenzahl6.png")
     else:
         # If the dice number is not valid, return None.
@@ -836,7 +836,7 @@ def gameLoop(playerList):
 
 
 # Update the state and appearance of all figure buttons based on the mouse position
-def updateFigureButtons(PLAY_MOUSE_POS):
+def updateFigureButtons(playMousePos):
     # Update and change color for yellow player's figure buttons
     fge1Button.update(screen)
     fge1Button.changeColor(playMousePos)
@@ -883,12 +883,12 @@ def checkForOthers(playerName, newPosition):
     # Iterate over each player's name and position in the playerosition dictionary
     for otherPlayer, position in playerPosition.items():
         # Check if the player is not the current player and if their position matches the new position
-        if other_player != player_name and position == new_position:
+        if otherPlayer != playerName and position == newPosition:
             # Reset the other player's position to their starting position
             playerPosition[otherPlayer] = hauserList[0]
 
             # Update the position and state of the other player's figure buttons based on their name
-            if other_player == "fge1":
+            if otherPlayer == "fge1":
                 # Set the position of the figure to the starting position of the corresponding color
                 fge1.setPosition(hauserList[0])
                 # Update the position of the figure button on the screen
@@ -966,7 +966,7 @@ def checkForOthers(playerName, newPosition):
     playerPosition[playerName] = newPosition
 
 # This function makes a move on the game board based on the dice roll, current position, player color, and current figure.
-def makeMove(dice_num, position, color, currentFigure):
+def makeMove(diceNum, position, color, currentFigure):
     # Check if the player is yellow
     if color == "yellow":
         # Check if the current position is one of the yellow starting positions
@@ -1057,14 +1057,14 @@ def winner(winPlayer):
         screen.blit(BG, (0, 0))  # Background on the screen
 
         # Get the current mouse position.
-        ENDSCREEN_MOUSE_POS = pg.mouse.get_pos()
+        endscreenMousePos = pg.mouse.get_pos()
 
         # Render the text displaying the winner.
         endscreenText = getFont(30).render("The winner is player " + str(winPlayer), True, "#856c4a")  # Textfield
         endScreenRect = endscreenText.get_rect(center=(640, 150))
 
         # Display the winner text.
-        screen.blit(ENDSCREEN_TEXT, ENDSCREEN_RECT)
+        screen.blit(endscreenText, endScreenRect)
 
         # Update the display.
         pg.display.update()
@@ -1077,13 +1077,13 @@ def winner(winPlayer):
                 sys.exit()
             if event.type == pg.MOUSEBUTTONDOWN:
                 # Check if the quit button is clicked and quit the game if clicked.
-                if QUIT_BUTTON.checkForInput(ENDSCREEN_MOUSE_POS):
+                if quitButton.checkForInput(endscreenMousePos):
                     pg.quit()
                     sys.exit()
 
         # Update and render the quit button.
-        QUIT_BUTTON.changeColor(ENDSCREEN_MOUSE_POS)
-        QUIT_BUTTON.update(screen)
+        quitButton.changeColor(endscreenMousePos)
+        quitButton.update(screen)
 
 # Create Figure-Objects
 fge1 = Figure(position=hauserList[0], color="yellow")

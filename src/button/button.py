@@ -1,4 +1,9 @@
 class Button():
+    # Class Button defines a graphical button element for user interfaces. It includes methods for initializing the button with
+    # attributes such as image, position, text input, font, base color, and hovering color. Additionally, it provides functions
+    # for updating the button on the screen, changing its position, retrieving its current position, checking for mouse input,
+    # and adjusting its color based on mouse hovering.
+
     # initializing the buttons
     def __init__(self, image, pos, textInput, font, baseColor, hoveringColor):
         self.image = image
