@@ -3,7 +3,7 @@ class Player:
     def __init__(self, name, color):
         self.name = name
         self.color = color
-        self.figure_list = []
+        self.figureList = []
 
     # setting the name
     def setName(self, newName):
@@ -22,12 +22,12 @@ class Player:
 
     # memorizing which figures are on the target-fields
     def setFinish(self):
-        self.figure_list.append(True)
+        self.figureList.append(True)
 
-    # returning the figure-list
+    # returning the figureList
     def getFinish(self):
-        return self.figure_list
+        return self.figureList
 
     # declaring the winner
     def winner(self):
-        return self.figure_list.count(True) == 4
+        return self.figureList.count(True) == 4

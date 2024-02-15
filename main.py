@@ -20,39 +20,39 @@ black = (0, 0, 0)
 
 #create Object
 playground = GameField()
-field_list = playground.fields()
-hauser_list = playground.houses()
-zielfelder_list = playground.finishFields()
+fieldList = playground.fields()
+hauserList = playground.houses()
+zielfelderList = playground.finishFields()
 
-player_position = { }
-saved_name_rects = []
+playerPosition = { }
+savedNameRects = []
 
-def get_font(size): # Returns Press-Start-2P in the desired size
+def getFont(size): # Returns Press-Start-2P in the desired size
     return pg.font.Font("assets/font.ttf", size)
 
 # fonts
-font = get_font(10)
-input_font = get_font(15)
+font = getFont(10)
+inputFont = getFont(15)
 
 # This function scales an image while maintaining its aspect ratio.
-def transform_scale_keep_ratio(image, size):
+def transformScaleKeepRatio(image, size):
     iwidth, iheight = image.get_size()
     scale = min(size[0] / iwidth, size[1] / iheight)
     #scale = max(size[0] / iwidth, size[1] / iheight)
-    new_size = (round(iwidth * scale), round(iheight * scale))
-    scaled_image = pg.transform.smoothscale(image, new_size)
-    image_rect = scaled_image.get_rect(center = (size[0] // 2, size[1] // 2))
-    return scaled_image, image_rect # Return the scaled image and the centered rectangle.
+    newSize = (round(iwidth * scale), round(iheight * scale))
+    scaledImage = pg.transform.smoothscale(image, newSize)
+    imageRect = scaledImage.get_rect(center = (size[0] // 2, size[1] // 2))
+    return scaledImage, imageRect # Return the scaled image and the centered rectangle.
 
 # This function scales an image to a new width and height.
 def scaleImage(image, newWidth, newHeight):
-    original_width, original_height = image.get_size()  # Get the original width and height of the image.
-    scaled_image = pg.transform.scale(image, (newWidth, newHeight))     # Scale the image to the new width and height.
+    originalWidth, originalHeight = image.get_size()  # Get the original width and height of the image.
+    scaledImage = pg.transform.scale(image, (newWidth, newHeight))     # Scale the image to the new width and height.
     # Return the scaled image.
-    return scaled_image
+    return scaledImage
 
 # This function represents the main menu of the game.
-def main_menu():
+def mainMenu():
     # Set the window caption.
     pg.display.set_caption("Don't get ANGRY!")
 
@@ -65,26 +65,26 @@ def main_menu():
         screen.blit(BG, (0, 0))  # Background on the screen
 
         # Get the current mouse position.
-        MENU_MOUSE_POS = pg.mouse.get_pos()
+        menuMousePos = pg.mouse.get_pos()
 
         # Render the main menu title text.
-        MENU_TEXT = get_font(75).render("Don't get ANGRY!", True, "#856c4a")  # Textfield
-        MENU_RECT = MENU_TEXT.get_rect(center=(640, 100))
+        menuText = getFont(75).render("Don't get ANGRY!", True, "#856c4a")  # Textfield
+        menuRect = menuText.get_rect(center=(640, 100))
 
         # Create buttons for play, rules, and quit.
-        PLAY_BUTTON = Button(image=pg.image.load("assets/Play_Rect.png"), pos=(340, 270),
-                             text_input="PLAY", font=get_font(75), base_color="White", hovering_color="#fcce8d")
-        RULES_BUTTON = Button(image=scaleImage(pg.image.load("assets/Play_Rect.png"), 430, 109), pos=(340, 420),
-                              text_input="RULES", font=get_font(75), base_color="White", hovering_color="#fcce8d")
-        QUIT_BUTTON = Button(image=pg.image.load("assets/Play_Rect.png"), pos=(340, 570),
-                             text_input="QUIT", font=get_font(75), base_color="White", hovering_color="#fcce8d")
+        playButton = Button(image=pg.image.load("assets/PlayRect.png"), pos=(340, 270),
+                            textInput="PLAY", font=getFont(75), baseColor="White", hoveringColor="#fcce8d")
+        rulesButton  = Button(image=scaleImage(pg.image.load("assets/PlayRect.png"), 430, 109), pos=(340, 420),
+                              textInput="RULES", font=getFont(75), baseColor="White", hoveringColor="#fcce8d")
+        quitButton = Button(image=pg.image.load("assets/PlayRect.png"), pos=(340, 570),
+                            textInput="QUIT", font=getFont(75), baseColor="White", hoveringColor="#fcce8d")
 
         # Display the main menu title text.
-        screen.blit(MENU_TEXT, MENU_RECT)
+        screen.blit(menuText, menuRect)
 
         # Update and render buttons.
-        for button in [PLAY_BUTTON, RULES_BUTTON, QUIT_BUTTON]:
-            button.changeColor(MENU_MOUSE_POS)
+        for button in [playButton, rulesButton , quitButton]:
+            button.changeColor(menuMousePos)
             button.update(screen)
 
         # Event handling loop.
@@ -95,11 +95,11 @@ def main_menu():
                 sys.exit()
             if event.type == pg.MOUSEBUTTONDOWN:
                 # Check for button clicks and perform corresponding actions.
-                if PLAY_BUTTON.checkForInput(MENU_MOUSE_POS):
+                if playButton.checkForInput(menuMousePos):
                     play()  # Run the play function
-                if RULES_BUTTON.checkForInput(MENU_MOUSE_POS):
+                if rulesButton .checkForInput(menuMousePos):
                     rules()  # Run the rules function
-                if QUIT_BUTTON.checkForInput(MENU_MOUSE_POS):
+                if quitButton.checkForInput(menuMousePos):
                     pg.quit()
                     sys.exit()
 
@@ -109,29 +109,28 @@ def main_menu():
 # This function represents the rules screen of the game.
 def rules():
     while True:
-        OPTIONS_MOUSE_POS = pg.mouse.get_pos()  # Get the current mouse position.
+        OptionsMousePos = pg.mouse.get_pos()  # Get the current mouse position.
 
         screen.fill("#fcce8d")  # Fill the screen with a background color.
-        #schrift = get_font(25)
 
         # Function to draw text on the screen.
-        def draw_text(text):
+        def drawText(text):
             # Set up the font and initial position for drawing text.
-            font = get_font(12)
-            y_pos = 15
-            x_pos = 20
+            font = getFont(12)
+            yPos = 15
+            xPos = 20
 
             # Iterate over each line of the provided text and render it onto the screen.
             for line in text.splitlines():
-                rendered_line = font.render(line, 1, (0, 0, 0))
-                screen.blit(rendered_line, (x_pos, y_pos))
+                renderedLine = font.render(line, 1, (0, 0, 0))
+                screen.blit(renderedLine, (xPos, yPos))
 
                 # Update the y-position for the next line.
-                y_pos += 21
+                yPos += 21
 
         # Display the rules text.
         if __name__ == "__main__":
-            text_to_display = (
+            textToDisplay = (
                 "Your pieces always start in the starting circle and are moved in the direction of the arrow \n"
                 "towards the finish. \n"
                 "On your turn, you roll the dice and can move your figure according to the result of the dice, \n"
@@ -159,11 +158,11 @@ def rules():
                 "The first player to get their 4 pieces to the finish line wins. \n"
                 "The others can decide for themselves whether the game ends or whether they still want to play \n"
                 "for the lower places")
-            draw_text(text_to_display)
+            drawText(textToDisplay)
 
         # Create a button for returning to the main menu.
-        RULES_BACK = Button(image=None, pos=(1200, 690),
-                              text_input="BACK", font=get_font(20), base_color="Black", hovering_color="White")
+        RulesBack = Button(image=None, pos=(1200, 690),
+                           textInput="BACK", font=getFont(20), baseColor="Black", hoveringColor="White")
 
         # Event handling loop.
         for event in pg.event.get():
@@ -173,12 +172,12 @@ def rules():
                 sys.exit()
             if event.type == pg.MOUSEBUTTONDOWN:
                 # Check if the back button is clicked and return to the main menu if clicked.
-                if RULES_BACK.checkForInput(OPTIONS_MOUSE_POS):
-                    main_menu()
+                if RulesBack.checkForInput(OptionsMousePos):
+                    mainMenu()
 
         # Update and render the back button.
-        RULES_BACK.changeColor(OPTIONS_MOUSE_POS)
-        RULES_BACK.update(screen)
+        RulesBack.changeColor(OptionsMousePos)
+        RulesBack.update(screen)
 
         pg.display.update() # Update the display.
 
@@ -188,44 +187,44 @@ def play():
     pg.display.set_caption("Don't get ANGRY!")
 
     # Define background color
-    background_color = "#fcce8d"
+    backgroundColor = "#fcce8d"
 
     # Load game field image and scale it to fit the screen
     gamefield = pg.image.load("assets/gamefield.png")
-    gamefield, gamefield_rect = transform_scale_keep_ratio(gamefield, screen.get_size())
+    gamefield, gamefieldRect = transformScaleKeepRatio(gamefield, screen.get_size())
 
     # Define buttons for going back to the main menu and starting the game
-    PLAY_BACK = Button(image=None, pos=(1165, 670),
-                       text_input="BACK", font=get_font(30), base_color="Black", hovering_color="WHITE")
+    PlayBack = Button(image=None, pos=(1165, 670),
+                      textInput="BACK", font=getFont(30), baseColor="Black", hoveringColor="WHITE")
 
-    GAME_ACTIVE = Button(image=None, pos=(135, 670), text_input="START", font=get_font(30),
-                         base_color="Black", hovering_color="WHITE")
+    gameActive = Button(image=None, pos=(135, 670), textInput="START", font=getFont(30),
+                         baseColor="Black", hoveringColor="WHITE")
 
     # Text prompting the player to enter names
-    prompt_text = ("Press Enter, to add a player")
-    prompt_rect = pg.Rect(20, 50, 200, 40)
+    promptText = ("Press Enter, to add a player")
+    promptRect = pg.Rect(20, 50, 200, 40)
 
     # Input field parameters
-    input_rect = pg.Rect(20, 100, 200, 40)
-    input_text = ""
-    cursor_active = False
-    cursor_timer = 0  # Timer for cursor blink effect
-    cursor_size = 2  # Size of the cursor
+    inputRect = pg.Rect(20, 100, 200, 40)
+    inputText = ""
+    cursorActive = False
+    cursorTimer = 0  # Timer for cursor blink effect
+    cursorSize = 2  # Size of the cursor
 
     # Saved player names
-    max_players = 4
-    saved_name_rects = [pg.Rect(20, 190 + i * 80, 200, 40) for i in range(max_players)]
-    saved_name_texts = [""] * max_players
+    maxPlayers = 4
+    savedNameRects = [pg.Rect(20, 190 + i * 80, 200, 40) for i in range(maxPlayers)]
+    savedNameTexts = [""] * maxPlayers
 
     # Variable for storing the background image
     image = None
 
     # Flag indicating whether the game is active
-    active_play = False
+    activePlay = False
 
     while True:
         # Get the current mouse position
-        PLAY_MOUSE_POS = pg.mouse.get_pos()
+        playMousePos = pg.mouse.get_pos()
 
         for event in pg.event.get():
             if event.type == pg.QUIT:
@@ -234,76 +233,76 @@ def play():
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_RETURN:
                     # Add player name when Enter is pressed
-                    if not cursor_active:
-                        cursor_active = True
-                        prompt_text = "Enter player name"
+                    if not cursorActive:
+                        cursorActive = True
+                        promptText = "Enter player name"
                     else:
-                        for i in range(len(saved_name_texts)):
-                            if not saved_name_texts[i] and input_text:
-                                saved_name_texts[i] = input_text
-                                input_text = ""
-                                cursor_timer = 0
-                                if i == max_players - 1:
-                                    cursor_active = False
-                                    prompt_text = "All players registered"
+                        for i in range(len(savedNameTexts)):
+                            if not savedNameTexts[i] and inputText:
+                                savedNameTexts[i] = inputText
+                                inputText = ""
+                                cursorTimer = 0
+                                if i == maxPlayers - 1:
+                                    cursorActive = False
+                                    promptText = "All players registered"
                                 else:
-                                    prompt_text = "Enter player name"
+                                    promptText = "Enter player name"
                                 break
-                elif cursor_active:
+                elif cursorActive:
                     # Handle input when cursor is active
                     if event.key == pg.K_BACKSPACE:
-                        input_text = input_text[:-1]
+                        inputText = inputText[:-1]
                     else:
-                        input_text += event.unicode
+                        inputText += event.unicode
             if event.type == pg.MOUSEBUTTONDOWN:
                 # Check for button clicks
-                if PLAY_BACK.checkForInput(PLAY_MOUSE_POS):
-                    main_menu()
-                if GAME_ACTIVE.checkForInput(PLAY_MOUSE_POS):
-                    gameLoop(saved_name_texts)
+                if PlayBack.checkForInput(playMousePos):
+                    mainMenu()
+                if gameActive.checkForInput(playMousePos):
+                    gameLoop(savedNameTexts)
             elif event.type == pg.VIDEORESIZE:
                 # Resize the window and game field image
                 window = pg.display.set_mode(event.size, pg.RESIZABLE)
-                gamefield, gamefield_rect = transform_scale_keep_ratio(gamefield, window.get_size())
+                gamefield, gamefieldRect = transformScaleKeepRatio(gamefield, window.get_size())
 
         # Fill the screen with background color
-        screen.fill(background_color)
+        screen.fill(backgroundColor)
         # Draw the game field image
-        screen.blit(gamefield, gamefield_rect)
+        screen.blit(gamefield, gamefieldRect)
 
         # Update and draw the back button
-        PLAY_BACK.changeColor(PLAY_MOUSE_POS)
-        PLAY_BACK.update(screen)
+        PlayBack.changeColor(playMousePos)
+        PlayBack.update(screen)
 
         # Update and draw the start button
-        GAME_ACTIVE.changeColor(PLAY_MOUSE_POS)
-        GAME_ACTIVE.update(screen)
+        gameActive.changeColor(playMousePos)
+        gameActive.update(screen)
 
         # Display prompt text
-        prompt_surface = font.render(prompt_text, True, black)
-        screen.blit(prompt_surface, (prompt_rect.x + 5, prompt_rect.y + 5))
+        promptSurface = font.render(promptText, True, black)
+        screen.blit(promptSurface, (promptRect.x + 5, promptRect.y + 5))
 
         # Draw input field if active
-        if cursor_active:
-            pg.draw.rect(screen, white, input_rect)
-            pg.draw.rect(screen, black, input_rect, 2)
-            input_surface = input_font.render(input_text, True, black)
-            screen.blit(input_surface, (input_rect.x + 5, input_rect.y + 5))
+        if cursorActive:
+            pg.draw.rect(screen, white, inputRect)
+            pg.draw.rect(screen, black, inputRect, 2)
+            inputSurface = inputFont.render(inputText, True, black)
+            screen.blit(inputSurface, (inputRect.x + 5, inputRect.y + 5))
 
             # Cursor blink effect
             if pg.time.get_ticks() % 1000 < 500:
-                cursor_height = input_surface.get_height()
-                cursor_rect = pg.Rect(input_rect.x + 5 + input_surface.get_width(), input_rect.y + 5, cursor_size,
-                                      cursor_height)
-                pg.draw.rect(screen, black, cursor_rect)
+                cursorHeight = inputSurface.get_height()
+                cursorRect = pg.Rect(inputRect.x + 5 + inputSurface.get_width(), inputRect.y + 5, cursorSize,
+                                      cursorHeight)
+                pg.draw.rect(screen, black, cursorRect)
 
         # Display saved player names
-        for i in range(len(saved_name_texts)):
-            if saved_name_texts[i]:
-                pg.draw.rect(screen, "#fcce8d", saved_name_rects[i])
-                pg.draw.rect(screen, "#fcce8d", saved_name_rects[i], 2)
-                saved_name_surface = font.render(saved_name_texts[i], True, "#856c4a")
-                screen.blit(saved_name_surface, (saved_name_rects[i].x + 5, saved_name_rects[i].y + 5))
+        for i in range(len(savedNameTexts)):
+            if savedNameTexts[i]:
+                pg.draw.rect(screen, "#fcce8d", savedNameRects[i])
+                pg.draw.rect(screen, "#fcce8d", savedNameRects[i], 2)
+                savedNameSurface = font.render(savedNameTexts[i], True, "#856c4a")
+                screen.blit(savedNameSurface, (savedNameRects[i].x + 5, savedNameRects[i].y + 5))
 
         # Update the display
         pg.display.update()
@@ -332,39 +331,39 @@ def imageNumOfPoints(dice_num):
 
 
 # This function represents the main game loop where players take turns rolling the dice and moving their pieces.
-def gameLoop(player_list):
+def gameLoop(playerList):
     # Set the window title
     pg.display.set_caption("Don't get ANGRY!")
 
     # Define background color
-    background_color = "#fcce8d"
+    backgroundColor = "#fcce8d"
 
     # Load game field image and scale it to fit the screen
     gamefield = pg.image.load("assets/gamefield.png")
-    gamefield, gamefield_rect = transform_scale_keep_ratio(gamefield, screen.get_size())
+    gamefield, gamefieldRect = transformScaleKeepRatio(gamefield, screen.get_size())
 
     # Set names for players
-    player1.setName(player_list[0])
-    player2.setName(player_list[1])
-    player3.setName(player_list[2])
-    player4.setName(player_list[3])
+    player1.setName(playerList[0])
+    player2.setName(playerList[1])
+    player3.setName(playerList[2])
+    player4.setName(playerList[3])
 
     # Define buttons for going back to the main menu and rolling the dice
-    PLAY_BACK = Button(image=None, pos=(1165, 670),
-                       text_input="BACK", font=get_font(30), base_color="Black", hovering_color="WHITE")
-    DICE_BUTTON = Button(image=scaleImage(pg.image.load("assets/wuerfel.png"), 200, 200), pos=(1150, 90),
-                         text_input="Roll the Dice",
-                         font=get_font(10), base_color="BLACK", hovering_color="WHITE")
+    playBack = Button(image=None, pos=(1165, 670),
+                       textInput="BACK", font=getFont(30), baseColor="Black", hoveringColor="WHITE")
+    diceButton= Button(image=scaleImage(pg.image.load("assets/wuerfel.png"), 200, 200), pos=(1150, 90),
+                         textInput="Roll the Dice",
+                         font=getFont(10), baseColor="BLACK", hoveringColor="WHITE")
 
     # Display player names on the board
-    name1_BUTTON = Button(image=None, pos=(366, 539), text_input=player_list[0], font=get_font(20),
-                          base_color="#856c4a", hovering_color=None)
-    name2_BUTTON = Button(image=None, pos=(366, 177), text_input=player_list[1], font=get_font(20),
-                          base_color="#856c4a", hovering_color=None)
-    name3_BUTTON = Button(image=None, pos=(908, 177), text_input=player_list[2], font=get_font(20),
-                          base_color="#856c4a", hovering_color=None)
-    name4_BUTTON = Button(image=None, pos=(908, 539), text_input=player_list[3], font=get_font(20),
-                          base_color="#856c4a", hovering_color=None)
+    name1Buttom = Button(image=None, pos=(366, 539), textInput=playerList[0], font=getFont(20),
+                          baseColor="#856c4a", hoveringColor=None)
+    name2Button = Button(image=None, pos=(366, 177), textInput=playerList[1], font=getFont(20),
+                          baseColor="#856c4a", hoveringColor=None)
+    name3Button = Button(image=None, pos=(908, 177), textInput=playerList[2], font=getFont(20),
+                          baseColor="#856c4a", hoveringColor=None)
+    name4Button = Button(image=None, pos=(908, 539), textInput=playerList[3], font=getFont(20),
+                          baseColor="#856c4a", hoveringColor=None)
 
     # Variable for storing the background image
     image = None
@@ -372,7 +371,7 @@ def gameLoop(player_list):
 
     while run:
         # Get the current mouse position
-        PLAY_MOUSE_POS = pg.mouse.get_pos()
+        playMousePos = pg.mouse.get_pos()
 
         for event in pg.event.get():
             if event.type == pg.QUIT:
@@ -403,400 +402,400 @@ def gameLoop(player_list):
             # Check if a mouse button is clicked
             if event.type == pg.MOUSEBUTTONDOWN:
                 # Check if the "BACK" button is clicked
-                if PLAY_BACK.checkForInput(PLAY_MOUSE_POS):
+                if playBack.checkForInput(playMousePos):
                     # If clicked, return to the main menu
-                    main_menu()
+                    mainMenu()
                 # Check if the "Roll the Dice" button is clicked
-                if DICE_BUTTON.checkForInput(PLAY_MOUSE_POS):
+                if diceButton.checkForInput(playMousePos):
                     # If clicked, create a Dice object and roll the dice
                     dice = Dice()
-                    dice_num = dice.roll_dice()
+                    diceNum = dice.rollDice()
                     # Get the corresponding image of the dice number
-                    image = imageNumOfPoints(dice_num)
+                    image = imageNumOfPoints(diceNum)
 
                 # Check if Yellow Figure 1 button is clicked
-                if FGE1_BUTTON.checkForInput(PLAY_MOUSE_POS):
+                if fge1Button.checkForInput(playMousePos):
                     # Set the moved attribute of the figure to the rolled dice number
-                    fge1.setMoved(dice_num)
+                    fge1.setMoved(diceNum)
                     # Check if the figure has reached the finish line
                     if fge1.finish() == True:
                         # If yes, update its position to the finish line
-                        FGE1_BUTTON.updatePosition(zielfelder_list[3])
-                        fge1.setPosition(zielfelder_list[3])
-                        player_position["fge1"] = zielfelder_list[3]
+                        fge1Button.updatePosition(zielfelderList[3])
+                        fge1.setPosition(zielfelderList[3])
+                        playerPosition["fge1"] = zielfelderList[3]
                         player1.setFinish()
                     # Check if the figure has moved beyond the finish line
                     elif fge1.getMoved() > 43:
                         # If yes, move the figure backwards
-                        fge1.setMoved(dice_num * (-1))
+                        fge1.setMoved(diceNum * (-1))
                     else:
                         # Otherwise, calculate the new position of the figure after moving it
-                        currentPos = makeMove(dice_num, fge1.getPosition(), "yellow", "fge1")
+                        currentPos = makeMove(diceNum, fge1.getPosition(), "yellow", "fge1")
                         # Check for other players on the new position and adjust accordingly
                         checkForOthers("fge1", currentPos)
                         # Update the position of the button representing the figure
-                        FGE1_BUTTON.updatePosition(currentPos)
+                        fge1Button.updatePosition(currentPos)
                         fge1.setPosition(currentPos)
 
                 # Check if Yellow Figure 2 button is clicked
-                if FGE2_BUTTON.checkForInput(PLAY_MOUSE_POS):
+                if fge2Button.checkForInput(playMousePos):
                     # Set the moved attribute of the figure to the rolled dice number
-                    fge2.setMoved(dice_num)
+                    fge2.setMoved(diceNum)
                     # Check if the figure has reached the finish line
                     if fge2.finish() == True:
                         # If yes, update its position to the finish line
-                        FGE2_BUTTON.updatePosition(zielfelder_list[2])
-                        fge2.setPosition(zielfelder_list[2])
-                        player_position["fge2"] = zielfelder_list[2]
+                        fge2Button.updatePosition(zielfelderList[2])
+                        fge2.setPosition(zielfelderList[2])
+                        playerPosition["fge2"] = zielfelderList[2]
                         player1.setFinish()
                     # Check if the figure has moved beyond the finish line
                     elif fge2.getMoved() > 43:
                         # If yes, move the figure backwards
-                        fge2.setMoved(dice_num * (-1))
+                        fge2.setMoved(diceNum * (-1))
                     else:
                         # Otherwise, calculate the new position of the figure after moving it
-                        currentPos = makeMove(dice_num, fge2.getPosition(), "yellow", "fge2")
+                        currentPos = makeMove(diceNum, fge2.getPosition(), "yellow", "fge2")
                         # Check for other players on the new position and adjust accordingly
                         checkForOthers("fge2", currentPos)
                         # Update the position of the button representing the figure
-                        FGE2_BUTTON.updatePosition(currentPos)
+                        fge2Button.updatePosition(currentPos)
                         fge2.setPosition(currentPos)
 
                 # Check if Yellow Figure 3 button is clicked
-                if FGE3_BUTTON.checkForInput(PLAY_MOUSE_POS):
+                if fge3Button.checkForInput(playMousePos):
                     # Set the moved attribute of the figure to the rolled dice number
-                    fge3.setMoved(dice_num)
+                    fge3.setMoved(diceNum)
                     # Check if the figure has reached the finish line
                     if fge3.finish() == True:
                         # If yes, update its position to the finish line
-                        FGE3_BUTTON.updatePosition(zielfelder_list[1])
-                        fge3.setPosition(zielfelder_list[1])
-                        player_position["fge3"] = zielfelder_list[1]
+                        fge3Button.updatePosition(zielfelderList[1])
+                        fge3.setPosition(zielfelderList[1])
+                        playerPosition["fge3"] = zielfelderList[1]
                         player1.setFinish()
                     # Check if the figure has moved beyond the finish line
                     elif fge3.getMoved() > 43:
                         # If yes, move the figure backwards
-                        fge3.setMoved(dice_num * (-1))
+                        fge3.setMoved(diceNum * (-1))
                     else:
                         # Otherwise, calculate the new position of the figure after moving it
-                        currentPos = makeMove(dice_num, fge3.getPosition(), "yellow", "fge3")
+                        currentPos = makeMove(diceNum, fge3.getPosition(), "yellow", "fge3")
                         # Check for other players on the new position and adjust accordingly
                         checkForOthers("fge3", currentPos)
                         # Update the position of the button representing the figure
-                        FGE3_BUTTON.updatePosition(currentPos)
+                        fge3Button.updatePosition(currentPos)
                         fge3.setPosition(currentPos)
 
                 # Check if Yellow Figure 4 button is clicked
-                if FGE4_BUTTON.checkForInput(PLAY_MOUSE_POS):
+                if fge4Button.checkForInput(playMousePos):
                     # Set the moved attribute of the figure to the rolled dice number
-                    fge4.setMoved(dice_num)
+                    fge4.setMoved(diceNum)
                     # Check if the figure has reached the finish line
                     if fge4.finish() == True:
                         # If yes, update its position to the finish line
-                        FGE4_BUTTON.updatePosition(zielfelder_list[0])
-                        fge4.setPosition(zielfelder_list[0])
-                        player_position["fge4"] = zielfelder_list[0]
+                        fge4Button.updatePosition(zielfelderList[0])
+                        fge4.setPosition(zielfelderList[0])
+                        playerPosition["fge4"] = zielfelderList[0]
                         player1.setFinish()
                     # Check if the figure has moved beyond the finish line
                     elif fge4.getMoved() > 43:
                         # If yes, move the figure backwards
-                        fge4.setMoved(dice_num * (-1))
+                        fge4.setMoved(diceNum * (-1))
                     else:
                         # Otherwise, calculate the new position of the figure after moving it
-                        currentPos = makeMove(dice_num, fge4.getPosition(), "yellow", "fge4")
+                        currentPos = makeMove(diceNum, fge4.getPosition(), "yellow", "fge4")
                         # Check for other players on the new position and adjust accordingly
                         checkForOthers("fge4", currentPos)
                         # Update the position of the button representing the figure
-                        FGE4_BUTTON.updatePosition(currentPos)
+                        fge4Button.updatePosition(currentPos)
                         fge4.setPosition(currentPos)
 
                 # Check if Green Figure 1 button is clicked
-                if FGR1_BUTTON.checkForInput(PLAY_MOUSE_POS):
+                if fgr1Button.checkForInput(playMousePos):
                     # Set the moved attribute of the figure to the rolled dice number
-                    fgr1.setMoved(dice_num)
+                    fgr1.setMoved(diceNum)
                     # Check if the figure has reached the finish line
                     if fgr1.finish() == True:
                         # If yes, update its position to the finish line
-                        FGR1_BUTTON.updatePosition(zielfelder_list[7])
-                        fgr1.setPosition(zielfelder_list[7])
-                        player_position["fgr1"] = zielfelder_list[7]
+                        fgr1Button.updatePosition(zielfelderList[7])
+                        fgr1.setPosition(zielfelderList[7])
+                        playerPosition["fgr1"] = zielfelderList[7]
                         player2.setFinish()
                     # Check if the figure has moved beyond the finish line
                     elif fgr1.getMoved() > 43:
                         # If yes, move the figure backwards
-                        fgr1.setMoved(dice_num * (-1))
+                        fgr1.setMoved(diceNum * (-1))
                     else:
                         # Otherwise, calculate the new position of the figure after moving it
-                        currentPos = makeMove(dice_num, fgr1.getPosition(), "green", "fgr1")
+                        currentPos = makeMove(diceNum, fgr1.getPosition(), "green", "fgr1")
                         # Check for other players on the new position and adjust accordingly
                         checkForOthers("fgr1", currentPos)
                         # Update the position of the button representing the figure
-                        FGR1_BUTTON.updatePosition(currentPos)
+                        fgr1Button.updatePosition(currentPos)
                         fgr1.setPosition(currentPos)
 
                 # Check if Green Figure 2 button is clicked
-                if FGR2_BUTTON.checkForInput(PLAY_MOUSE_POS):
+                if fgr2Button.checkForInput(playMousePos):
                     # Set the moved attribute of the figure to the rolled dice number
-                    fgr2.setMoved(dice_num)
+                    fgr2.setMoved(diceNum)
                     # Check if the figure has reached the finish line
                     if fgr2.finish() == True:
                         # If yes, update its position to the finish line
-                        FGR2_BUTTON.updatePosition(zielfelder_list[6])
-                        fgr2.setPosition(zielfelder_list[6])
-                        player_position["fgr2"] = zielfelder_list[6]
+                        fgr2Button.updatePosition(zielfelderList[6])
+                        fgr2.setPosition(zielfelderList[6])
+                        playerPosition["fgr2"] = zielfelderList[6]
                         player2.setFinish()
                     # Check if the figure has moved beyond the finish line
                     elif fgr2.getMoved() > 43:
                         # If yes, move the figure backwards
-                        fgr2.setMoved(dice_num * (-1))
+                        fgr2.setMoved(diceNum * (-1))
                     else:
                         # Otherwise, calculate the new position of the figure after moving it
-                        currentPos = makeMove(dice_num, fgr2.getPosition(), "green", "fgr2")
+                        currentPos = makeMove(diceNum, fgr2.getPosition(), "green", "fgr2")
                         # Check for other players on the new position and adjust accordingly
                         checkForOthers("fgr2", currentPos)
                         # Update the position of the button representing the figure
-                        FGR2_BUTTON.updatePosition(currentPos)
+                        fgr2Button.updatePosition(currentPos)
                         fgr2.setPosition(currentPos)
 
                 # Check if Green Figure 3 button is clicked
-                if FGR3_BUTTON.checkForInput(PLAY_MOUSE_POS):
+                if fgr3Button.checkForInput(playMousePos):
                     # Set the moved attribute of the figure to the rolled dice number
-                    fgr3.setMoved(dice_num)
+                    fgr3.setMoved(diceNum)
                     # Check if the figure has reached the finish line
                     if fgr3.finish() == True:
                         # If yes, update its position to the finish line
-                        FGR3_BUTTON.updatePosition(zielfelder_list[5])
-                        fgr3.setPosition(zielfelder_list[5])
-                        player_position["fgr3"] = zielfelder_list[5]
+                        fgr3Button.updatePosition(zielfelderList[5])
+                        fgr3.setPosition(zielfelderList[5])
+                        playerPosition["fgr3"] = zielfelderList[5]
                         player2.setFinish()
                     # Check if the figure has moved beyond the finish line
                     elif fgr3.getMoved() > 43:
                         # If yes, move the figure backwards
-                        fgr3.setMoved(dice_num * (-1))
+                        fgr3.setMoved(diceNum * (-1))
                     else:
                         # Otherwise, calculate the new position of the figure after moving it
-                        currentPos = makeMove(dice_num, fgr3.getPosition(), "green", "fgr3")
+                        currentPos = makeMove(diceNum, fgr3.getPosition(), "green", "fgr3")
                         # Check for other players on the new position and adjust accordingly
                         checkForOthers("fgr3", currentPos)
                         # Update the position of the button representing the figure
-                        FGR3_BUTTON.updatePosition(currentPos)
+                        fgr3Button.updatePosition(currentPos)
                         fgr3.setPosition(currentPos)
 
                 # Check if Green Figure 4 button is clicked
-                if FGR4_BUTTON.checkForInput(PLAY_MOUSE_POS):
+                if fgr4Button.checkForInput(playMousePos):
                     # Set the moved attribute of the figure to the rolled dice number
-                    fgr4.setMoved(dice_num)
+                    fgr4.setMoved(diceNum)
                     # Check if the figure has reached the finish line
                     if fgr4.finish() == True:
                         # If yes, update its position to the finish line
-                        FGR4_BUTTON.updatePosition(zielfelder_list[4])
-                        fgr4.setPosition(zielfelder_list[4])
-                        player_position["fgr4"] = zielfelder_list[4]
+                        fgr4Button.updatePosition(zielfelderList[4])
+                        fgr4.setPosition(zielfelderList[4])
+                        playerPosition["fgr4"] = zielfelderList[4]
                         player2.setFinish()
                     # Check if the figure has moved beyond the finish line
                     elif fgr4.getMoved() > 43:
                         # If yes, move the figure backwards
-                        fgr4.setMoved(dice_num * (-1))
+                        fgr4.setMoved(diceNum * (-1))
                     else:
                         # Otherwise, calculate the new position of the figure after moving it
-                        currentPos = makeMove(dice_num, fgr4.getPosition(), "green", "fgr4")
+                        currentPos = makeMove(diceNum, fgr4.getPosition(), "green", "fgr4")
                         # Check for other players on the new position and adjust accordingly
                         checkForOthers("fgr4", currentPos)
                         # Update the position of the button representing the figure
-                        FGR4_BUTTON.updatePosition(currentPos)
+                        fgr4Button.updatePosition(currentPos)
                         fgr4.setPosition(currentPos)
 
                 # Check if Blue Figure 1 button is clicked
-                if FB1_BUTTON.checkForInput(PLAY_MOUSE_POS):
+                if fb1Button.checkForInput(playMousePos):
                     # Set the moved attribute of the figure to the rolled dice number
-                    fb1.setMoved(dice_num)
+                    fb1.setMoved(diceNum)
                     # Check if the figure has reached the finish line
                     if fb1.finish() == True:
                         # If yes, update its position to the finish line
-                        FB1_BUTTON.updatePosition(zielfelder_list[11])
-                        fb1.setPosition(zielfelder_list[11])
-                        player_position["fb1"] = zielfelder_list[11]
+                        fb1Button.updatePosition(zielfelderList[11])
+                        fb1.setPosition(zielfelderList[11])
+                        playerPosition["fb1"] = zielfelderList[11]
                         player3.setFinish()
                     # Check if the figure has moved beyond the finish line
                     elif fb1.getMoved() > 43:
                         # If yes, move the figure backwards
-                        fb1.setMoved(dice_num * (-1))
+                        fb1.setMoved(diceNum * (-1))
                     else:
                         # Otherwise, calculate the new position of the figure after moving it
-                        currentPos = makeMove(dice_num, fb1.getPosition(), "blue", "fb1")
+                        currentPos = makeMove(diceNum, fb1.getPosition(), "blue", "fb1")
                         # Check for other players on the new position and adjust accordingly
                         checkForOthers("fb1", currentPos)
                         # Update the position of the button representing the figure
-                        FB1_BUTTON.updatePosition(currentPos)
+                        fb1Button.updatePosition(currentPos)
                         fb1.setPosition(currentPos)
 
                 # Check if Blue Figure 2 button is clicked
-                if FB2_BUTTON.checkForInput(PLAY_MOUSE_POS):
+                if fb2Button.checkForInput(playMousePos):
                     # Set the moved attribute of the figure to the rolled dice number
-                    fb2.setMoved(dice_num)
+                    fb2.setMoved(diceNum)
                     # Check if the figure has reached the finish line
                     if fb2.finish() == True:
                         # If yes, update its position to the finish line
-                        FB2_BUTTON.updatePosition(zielfelder_list[10])
-                        fb2.setPosition(zielfelder_list[10])
-                        player_position["fb2"] = zielfelder_list[10]
+                        fb2Button.updatePosition(zielfelderList[10])
+                        fb2.setPosition(zielfelderList[10])
+                        playerPosition["fb2"] = zielfelderList[10]
                         player3.setFinish()
                     # Check if the figure has moved beyond the finish line
                     elif fb2.getMoved() > 43:
                         # If yes, move the figure backwards
-                        fb2.setMoved(dice_num * (-1))
+                        fb2.setMoved(diceNum * (-1))
                     else:
                         # Otherwise, calculate the new position of the figure after moving it
-                        currentPos = makeMove(dice_num, fb2.getPosition(), "blue", "fb2")
+                        currentPos = makeMove(diceNum, fb2.getPosition(), "blue", "fb2")
                         # Check for other players on the new position and adjust accordingly
                         checkForOthers("fb2", currentPos)
                         # Update the position of the button representing the figure
-                        FB2_BUTTON.updatePosition(currentPos)
+                        fb2Button.updatePosition(currentPos)
                         fb2.setPosition(currentPos)
 
                 # Check if Blue Figure 3 button is clicked
-                if FB3_BUTTON.checkForInput(PLAY_MOUSE_POS):
+                if fb3Button.checkForInput(playMousePos):
                     # Set the moved attribute of the figure to the rolled dice number
-                    fb3.setMoved(dice_num)
+                    fb3.setMoved(diceNum)
                     # Check if the figure has reached the finish line
                     if fb3.finish() == True:
                         # If yes, update its position to the finish line
-                        FB3_BUTTON.updatePosition(zielfelder_list[9])
-                        fb3.setPosition(zielfelder_list[9])
-                        player_position["fb3"] = zielfelder_list[9]
+                        fb3Button.updatePosition(zielfelderList[9])
+                        fb3.setPosition(zielfelderList[9])
+                        playerPosition["fb3"] = zielfelderList[9]
                         player3.setFinish()
                     # Check if the figure has moved beyond the finish line
                     elif fb3.getMoved() > 43:
                         # If yes, move the figure backwards
-                        fb3.setMoved(dice_num * (-1))
+                        fb3.setMoved(diceNum * (-1))
                     else:
                         # Otherwise, calculate the new position of the figure after moving it
-                        currentPos = makeMove(dice_num, fb3.getPosition(), "blue", "fb3")
+                        currentPos = makeMove(diceNum, fb3.getPosition(), "blue", "fb3")
                         # Check for other players on the new position and adjust accordingly
                         checkForOthers("fb3", currentPos)
                         # Update the position of the button representing the figure
-                        FB3_BUTTON.updatePosition(currentPos)
+                        fb3Button.updatePosition(currentPos)
                         fb3.setPosition(currentPos)
 
                 # Check if Blue Figure 4 button is clicked
-                if FB4_BUTTON.checkForInput(PLAY_MOUSE_POS):
+                if fb4Button.checkForInput(playMousePos):
                     # Set the moved attribute of the figure to the rolled dice number
-                    fb4.setMoved(dice_num)
+                    fb4.setMoved(diceNum)
                     # Check if the figure has reached the finish line
                     if fb4.finish() == True:
                         # If yes, update its position to the finish line
-                        FB4_BUTTON.updatePosition(zielfelder_list[8])
-                        fb4.setPosition(zielfelder_list[8])
-                        player_position["fb4"] = zielfelder_list[8]
+                        fb4Button.updatePosition(zielfelderList[8])
+                        fb4.setPosition(zielfelderList[8])
+                        playerPosition["fb4"] = zielfelderList[8]
                         player3.setFinish()
                     # Check if the figure has moved beyond the finish line
                     elif fb4.getMoved() > 43:
                         # If yes, move the figure backwards
-                        fb4.setMoved(dice_num * (-1))
+                        fb4.setMoved(diceNum * (-1))
                     else:
                         # Otherwise, calculate the new position of the figure after moving it
-                        currentPos = makeMove(dice_num, fb4.getPosition(), "blue", "fb4")
+                        currentPos = makeMove(diceNum, fb4.getPosition(), "blue", "fb4")
                         # Check for other players on the new position and adjust accordingly
                         checkForOthers("fb4", currentPos)
                         # Update the position of the button representing the figure
-                        FB4_BUTTON.updatePosition(currentPos)
+                        fb4Button.updatePosition(currentPos)
                         fb4.setPosition(currentPos)
 
                 # Buttons for Red Figures 1-4
                 # Check if Red Figure 1 button is clicked
-                if FR1_BUTTON.checkForInput(PLAY_MOUSE_POS):
+                if fr1Button.checkForInput(playMousePos):
                     # Set the moved attribute of the figure to the rolled dice number
-                    fr1.setMoved(dice_num)
+                    fr1.setMoved(diceNum)
                     # Check if the figure has reached the finish line
                     if fr1.finish() == True:
                         # If yes, update its position to the finish line
-                        FR1_BUTTON.updatePosition(zielfelder_list[15])
-                        fr1.setPosition(zielfelder_list[15])
-                        player_position["fr1"] = zielfelder_list[15]
+                        fr1Button.updatePosition(zielfelderList[15])
+                        fr1.setPosition(zielfelderList[15])
+                        playerPosition["fr1"] = zielfelderList[15]
                         player4.setFinish()
                     # Check if the figure has moved beyond the finish line
                     elif fr1.getMoved() > 43:
                         # If yes, move the figure backwards
-                        fr1.setMoved(dice_num * (-1))
+                        fr1.setMoved(diceNum * (-1))
                     else:
                         # Otherwise, calculate the new position of the figure after moving it
-                        currentPos = makeMove(dice_num, fr1.getPosition(), "red", "fr1")
+                        currentPos = makeMove(diceNum, fr1.getPosition(), "red", "fr1")
                         # Check for other players on the new position and adjust accordingly
                         checkForOthers("fr1", currentPos)
                         # Update the position of the button representing the figure
-                        FR1_BUTTON.updatePosition(currentPos)
+                        fr1Button.updatePosition(currentPos)
                         fr1.setPosition(currentPos)
 
                 # Check if Red Figure 2 button is clicked
-                if FR2_BUTTON.checkForInput(PLAY_MOUSE_POS):
+                if fr2Button.checkForInput(playMousePos):
                     # Set the moved attribute of the figure to the rolled dice number
-                    fr2.setMoved(dice_num)
+                    fr2.setMoved(diceNum)
                     # Check if the figure has reached the finish line
                     if fr2.finish() == True:
                         # If yes, update its position to the finish line
-                        FR2_BUTTON.updatePosition(zielfelder_list[14])
-                        fr2.setPosition(zielfelder_list[14])
-                        player_position["fr2"] = zielfelder_list[14]
+                        fr2Button.updatePosition(zielfelderList[14])
+                        fr2.setPosition(zielfelderList[14])
+                        playerPosition["fr2"] = zielfelderList[14]
                         player4.setFinish()
                     # Check if the figure has moved beyond the finish line
                     elif fr2.getMoved() > 43:
                         # If yes, move the figure backwards
-                        fr2.setMoved(dice_num * (-1))
+                        fr2.setMoved(diceNum * (-1))
                     else:
                         # Otherwise, calculate the new position of the figure after moving it
-                        currentPos = makeMove(dice_num, fr2.getPosition(), "red", "fr2")
+                        currentPos = makeMove(diceNum, fr2.getPosition(), "red", "fr2")
                         # Check for other players on the new position and adjust accordingly
                         checkForOthers("fr2", currentPos)
                         # Update the position of the button representing the figure
-                        FR2_BUTTON.updatePosition(currentPos)
+                        fr2Button.updatePosition(currentPos)
                         fr2.setPosition(currentPos)
 
                 # Check if Red Figure 3 button is clicked
-                if FR3_BUTTON.checkForInput(PLAY_MOUSE_POS):
+                if fr3Button.checkForInput(playMousePos):
                     # Set the moved attribute of the figure to the rolled dice number
-                    fr3.setMoved(dice_num)
+                    fr3.setMoved(diceNum)
                     # Check if the figure has reached the finish line
                     if fr3.finish() == True:
                         # If yes, update its position to the finish line
-                        FR3_BUTTON.updatePosition(zielfelder_list[13])
-                        fr3.setPosition(zielfelder_list[13])
-                        player_position["fr3"] = zielfelder_list[13]
+                        fr3Button.updatePosition(zielfelderList[13])
+                        fr3.setPosition(zielfelderList[13])
+                        playerPosition["fr3"] = zielfelderList[13]
                         player4.setFinish()
                     # Check if the figure has moved beyond the finish line
                     elif fr3.getMoved() > 43:
                         # If yes, move the figure backwards
-                        fr3.setMoved(dice_num * (-1))
+                        fr3.setMoved(diceNum * (-1))
                     else:
                         # Otherwise, calculate the new position of the figure after moving it
-                        currentPos = makeMove(dice_num, fr3.getPosition(), "red", "fr3")
+                        currentPos = makeMove(diceNum, fr3.getPosition(), "red", "fr3")
                         # Check for other players on the new position and adjust accordingly
                         checkForOthers("fr3", currentPos)
                         # Update the position of the button representing the figure
-                        FR3_BUTTON.updatePosition(currentPos)
+                        fr3Button.updatePosition(currentPos)
                         fr3.setPosition(currentPos)
 
                 # Check if Red Figure 4 button is clicked
-                if FR4_BUTTON.checkForInput(PLAY_MOUSE_POS):
+                if fr4Button.checkForInput(playMousePos):
                     # Set the moved attribute of the figure to the rolled dice number
-                    fr4.setMoved(dice_num)
+                    fr4.setMoved(diceNum)
                     # Check if the figure has reached the finish line
                     if fr4.finish() == True:
                         # If yes, update its position to the finish line
-                        FR4_BUTTON.updatePosition(zielfelder_list[12])
-                        fr4.setPosition(zielfelder_list[12])
-                        player_position["fr4"] = zielfelder_list[12]
+                        fr4Button.updatePosition(zielfelderList[12])
+                        fr4.setPosition(zielfelderList[12])
+                        playerPosition["fr4"] = zielfelderList[12]
                         player4.setFinish()
                     # Check if the figure has moved beyond the finish line
                     elif fr4.getMoved() > 43:
                         # If yes, move the figure backwards
-                        fr4.setMoved(dice_num * (-1))
+                        fr4.setMoved(diceNum * (-1))
                     else:
                         # Otherwise, calculate the new position of the figure after moving it
-                        currentPos = makeMove(dice_num, fr4.getPosition(), "red", "fr4")
+                        currentPos = makeMove(diceNum, fr4.getPosition(), "red", "fr4")
                         # Check for other players on the new position and adjust accordingly
                         checkForOthers("fr4", currentPos)
                         # Update the position of the button representing the figure
-                        FR4_BUTTON.updatePosition(currentPos)
+                        fr4Button.updatePosition(currentPos)
                         fr4.setPosition(currentPos)
 
             # Handle event for resizing the window
@@ -804,28 +803,28 @@ def gameLoop(player_list):
                 # Set the window size to the new size while keeping it resizable
                 window = pg.display.set_mode(event.size, pg.RESIZABLE)
                 # Scale the gamefield image to fit the new window size while maintaining aspect ratio
-                gamefield, gamefield_rect = transform_scale_keep_ratio(gamefield, window.get_size())
+                gamefield, gamefieldRect = transformScaleKeepRatio(gamefield, window.get_size())
 
         # Fill the screen with the background color and blit the gamefield image onto it
-        screen.fill(background_color)
-        screen.blit(gamefield, gamefield_rect)
+        screen.fill(backgroundColor)
+        screen.blit(gamefield, gamefieldRect)
 
         # Update and draw the BACK button
-        PLAY_BACK.changeColor(PLAY_MOUSE_POS)
-        PLAY_BACK.update(screen)
+        playBack.changeColor(playMousePos)
+        playBack.update(screen)
 
         # Update and draw the DICE button
-        DICE_BUTTON.changeColor(PLAY_MOUSE_POS)
-        DICE_BUTTON.update(screen)
+        diceButton.changeColor(playMousePos)
+        diceButton.update(screen)
 
         # Update and draw the figure buttons for all players
-        updateFigureButtons(PLAY_MOUSE_POS)
+        updateFigureButtons(playMousePos)
 
         # Update and draw the name buttons for all players
-        name1_BUTTON.update(screen)
-        name2_BUTTON.update(screen)
-        name3_BUTTON.update(screen)
-        name4_BUTTON.update(screen)
+        name1Buttom.update(screen)
+        name2Button.update(screen)
+        name3Button.update(screen)
+        name4Button.update(screen)
 
         # If there is a new dice roll, display the corresponding dice image
         if image is not None:
@@ -839,201 +838,201 @@ def gameLoop(player_list):
 # Update the state and appearance of all figure buttons based on the mouse position
 def updateFigureButtons(PLAY_MOUSE_POS):
     # Update and change color for yellow player's figure buttons
-    FGE1_BUTTON.update(screen)
-    FGE1_BUTTON.changeColor(PLAY_MOUSE_POS)
-    FGE2_BUTTON.update(screen)
-    FGE2_BUTTON.changeColor(PLAY_MOUSE_POS)
-    FGE3_BUTTON.update(screen)
-    FGE3_BUTTON.changeColor(PLAY_MOUSE_POS)
-    FGE4_BUTTON.update(screen)
-    FGE4_BUTTON.changeColor(PLAY_MOUSE_POS)
+    fge1Button.update(screen)
+    fge1Button.changeColor(playMousePos)
+    fge2Button.update(screen)
+    fge2Button.changeColor(playMousePos)
+    fge3Button.update(screen)
+    fge3Button.changeColor(playMousePos)
+    fge4Button.update(screen)
+    fge4Button.changeColor(playMousePos)
 
     # Update and change color for green player's figure buttons
-    FGR1_BUTTON.update(screen)
-    FGR1_BUTTON.changeColor(PLAY_MOUSE_POS)
-    FGR2_BUTTON.update(screen)
-    FGR2_BUTTON.changeColor(PLAY_MOUSE_POS)
-    FGR3_BUTTON.update(screen)
-    FGR3_BUTTON.changeColor(PLAY_MOUSE_POS)
-    FGR4_BUTTON.update(screen)
-    FGR4_BUTTON.changeColor(PLAY_MOUSE_POS)
+    fgr1Button.update(screen)
+    fgr1Button.changeColor(playMousePos)
+    fgr2Button.update(screen)
+    fgr2Button.changeColor(playMousePos)
+    fgr3Button.update(screen)
+    fgr3Button.changeColor(playMousePos)
+    fgr4Button.update(screen)
+    fgr4Button.changeColor(playMousePos)
 
     # Update and change color for red player's figure buttons
-    FR1_BUTTON.update(screen)
-    FR1_BUTTON.changeColor(PLAY_MOUSE_POS)
-    FR2_BUTTON.update(screen)
-    FR2_BUTTON.changeColor(PLAY_MOUSE_POS)
-    FR3_BUTTON.update(screen)
-    FR3_BUTTON.changeColor(PLAY_MOUSE_POS)
-    FR4_BUTTON.update(screen)
-    FR4_BUTTON.changeColor(PLAY_MOUSE_POS)
+    fr1Button.update(screen)
+    fr1Button.changeColor(playMousePos)
+    fr2Button.update(screen)
+    fr2Button.changeColor(playMousePos)
+    fr3Button.update(screen)
+    fr3Button.changeColor(playMousePos)
+    fr4Button.update(screen)
+    fr4Button.changeColor(playMousePos)
 
     # Update and change color for blue player's figure buttons
-    FB1_BUTTON.update(screen)
-    FB1_BUTTON.changeColor(PLAY_MOUSE_POS)
-    FB2_BUTTON.update(screen)
-    FB2_BUTTON.changeColor(PLAY_MOUSE_POS)
-    FB3_BUTTON.update(screen)
-    FB3_BUTTON.changeColor(PLAY_MOUSE_POS)
-    FB4_BUTTON.update(screen)
-    FB4_BUTTON.changeColor(PLAY_MOUSE_POS)
+    fb1Button.update(screen)
+    fb1Button.changeColor(playMousePos)
+    fb2Button.update(screen)
+    fb2Button.changeColor(playMousePos)
+    fb3Button.update(screen)
+    fb3Button.changeColor(playMousePos)
+    fb4Button.update(screen)
+    fb4Button.changeColor(playMousePos)
 
 
 # This function checks if the new position is already occupied by another player
-def checkForOthers(player_name, new_position):
-    # Iterate over each player's name and position in the player_position dictionary
-    for other_player, position in player_position.items():
+def checkForOthers(playerName, newPosition):
+    # Iterate over each player's name and position in the playerosition dictionary
+    for otherPlayer, position in playerPosition.items():
         # Check if the player is not the current player and if their position matches the new position
         if other_player != player_name and position == new_position:
             # Reset the other player's position to their starting position
-            player_position[other_player] = hauser_list[0]
+            playerPosition[otherPlayer] = hauserList[0]
 
             # Update the position and state of the other player's figure buttons based on their name
             if other_player == "fge1":
                 # Set the position of the figure to the starting position of the corresponding color
-                fge1.setPosition(hauser_list[0])
+                fge1.setPosition(hauserList[0])
                 # Update the position of the figure button on the screen
-                FGE1_BUTTON.updatePosition(hauser_list[0])
+                fge1Button.updatePosition(hauserList[0])
                 # Reset the moved state of the figure
                 fge1.resetMoved()
             # The logic for updating the position and state of the figure buttons is the same for all players.
             # Iterate over each player and perform the same actions based on their name.
-            if other_player == "fge2":
-                fge2.setPosition(hauser_list[1])
-                FGE2_BUTTON.updatePosition(hauser_list[1])
+            if otherPlayer == "fge2":
+                fge2.setPosition(hauserList[1])
+                fge2Button.updatePosition(hauserList[1])
                 fge2.resetMoved()
-            if other_player == "fge3":
-                fge3.setPosition(hauser_list[2])
-                FGE3_BUTTON.updatePosition(hauser_list[2])
+            if otherPlayer == "fge3":
+                fge3.setPosition(hauserList[2])
+                fge3Button.updatePosition(hauserList[2])
                 fge3.resetMoved()
-            if other_player == "fge4":
-                fge4.setPosition(hauser_list[3])
-                FGE4_BUTTON.updatePosition(hauser_list[3])
+            if otherPlayer == "fge4":
+                fge4.setPosition(hauserList[3])
+                fge4Button.updatePosition(hauserList[3])
                 fge4.resetMoved()
 
-            if other_player == "fr1":
-                fr1.setPosition(hauser_list[12])
-                FR1_BUTTON.updatePosition(hauser_list[12])
+            if otherPlayer == "fr1":
+                fr1.setPosition(hauserList[12])
+                fr1Button.updatePosition(hauserList[12])
                 fr1.resetMoved()
-            if other_player == "fr2":
-                fr2.setPosition(hauser_list[13])
-                FR2_BUTTON.updatePosition(hauser_list[13])
+            if otherPlayer == "fr2":
+                fr2.setPosition(hauserList[13])
+                fr2Button.updatePosition(hauserList[13])
                 fr2.resetMoved()
-            if other_player == "fr3":
-                fr3.setPosition(hauser_list[14])
-                FR3_BUTTON.updatePosition(hauser_list[14])
+            if otherPlayer == "fr3":
+                fr3.setPosition(hauserList[14])
+                fr3Button.updatePosition(hauserList[14])
                 fr3.resetMoved()
-            if other_player == "fr4":
-                fr4.setPosition(hauser_list[15])
-                FR4_BUTTON.updatePosition(hauser_list[15])
+            if otherPlayer == "fr4":
+                fr4.setPosition(hauserList[15])
+                fr4Button.updatePosition(hauserList[15])
                 fr4.resetMoved()
 
-            if other_player == "fb1":
-                fb1.setPosition(hauser_list[8])
-                FB1_BUTTON.updatePosition(hauser_list[8])
+            if otherPlayer == "fb1":
+                fb1.setPosition(hauserList[8])
+                fb1Button.updatePosition(hauserList[8])
                 fb1.resetMoved()
-            if other_player == "fb2":
-                fb2.setPosition(hauser_list[9])
-                FB2_BUTTON.updatePosition(hauser_list[9])
+            if otherPlayer == "fb2":
+                fb2.setPosition(hauserList[9])
+                fb2Button.updatePosition(hauserList[9])
                 fb2.resetMoved()
-            if other_player == "fb3":
-                fb3.setPosition(hauser_list[10])
-                FB3_BUTTON.updatePosition(hauser_list[10])
+            if otherPlayer == "fb3":
+                fb3.setPosition(hauserList[10])
+                fb3Button.updatePosition(hauserList[10])
                 fb3.resetMoved()
-            if other_player == "fb4":
-                fb4.setPosition(hauser_list[11])
-                FB4_BUTTON.updatePosition(hauser_list[11])
+            if otherPlayer == "fb4":
+                fb4.setPosition(hauserList[11])
+                fb4Button.updatePosition(hauserList[11])
                 fb4.resetMoved()
 
-            if other_player == "fgr1":
-                fgr1.setPosition(hauser_list[4])
-                FGR1_BUTTON.updatePosition(hauser_list[4])
+            if otherPlayer == "fgr1":
+                fgr1.setPosition(hauserList[4])
+                fgr1Button.updatePosition(hauserList[4])
                 fgr1.resetMoved()
-            if other_player == "fgr2":
-                fgr2.setPosition(hauser_list[5])
-                FGR2_BUTTON.updatePosition(hauser_list[5])
+            if otherPlayer == "fgr2":
+                fgr2.setPosition(hauserList[5])
+                fgr2Button.updatePosition(hauserList[5])
                 fgr2.resetMoved()
-            if other_player == "fgr3":
-                fgr3.setPosition(hauser_list[6])
-                FGR3_BUTTON.updatePosition(hauser_list[6])
+            if otherPlayer == "fgr3":
+                fgr3.setPosition(hauserList[6])
+                fgr3Button.updatePosition(hauserList[6])
                 fgr3.resetMoved()
-            if other_player == "fgr4":
-                fgr4.setPosition(hauser_list[7])
-                FGR4_BUTTON.updatePosition(hauser_list[7])
+            if otherPlayer == "fgr4":
+                fgr4.setPosition(hauserList[7])
+                fgr4Button.updatePosition(hauserList[7])
                 fgr4.resetMoved()
             break
 
     # Update the position of the current player in the player_position dictionary
-    player_position[player_name] = new_position
+    playerPosition[playerName] = newPosition
 
 # This function makes a move on the game board based on the dice roll, current position, player color, and current figure.
 def makeMove(dice_num, position, color, currentFigure):
     # Check if the player is yellow
     if color == "yellow":
         # Check if the current position is one of the yellow starting positions
-        if position in hauser_list[0:4]:
-            # If a 6 is rolled, move to the first position on the field_list
-            if dice_num == 6:
-                position = field_list[0]
+        if position in hauserList[0:4]:
+            # If a 6 is rolled, move to the first position on the fieldList
+            if diceNum == 6:
+                position = fieldList[0]
             else:
                 # Otherwise, print a message indicating no 6 was rolled and move to the next player's turn
                 print("No 6 rolled. Next player's turn")
         else:
             # If not in the starting positions, calculate the new position based on the dice roll
             for i in range(0, 40):
-                if position == field_list[i]:
-                    counter = i + dice_num
+                if position == fieldList[i]:
+                    counter = i + diceNum
                     if counter > 39:
                         counter = counter - 40
-                    position = field_list[counter]
+                    position = fieldList[counter]
                     break
 
     # Check if the player is green
     elif color == "green":
-        if position in hauser_list[4:8]:
-            if dice_num == 6:
-                position = field_list[10]
+        if position in hauserList[4:8]:
+            if diceNum == 6:
+                position = fieldList[10]
             else:
                 print("No 6 rolled. Next player's turn")
         else:
             for i in range(0, 40):
-                if position == field_list[i]:
-                    counter = i + dice_num
+                if position == fieldList[i]:
+                    counter = i + diceNum
                     if counter > 39:
                         counter = counter - 40
-                    position = field_list[counter]
+                    position = fieldList[counter]
                     break
 
     # Check if the player is blue
     elif color == "blue":
-        if position in hauser_list[8:12]:
-            if dice_num == 6:
-                position = field_list[20]
+        if position in hauserList[8:12]:
+            if diceNum == 6:
+                position = fieldList[20]
             else:
                 print("No 6 rolled. Next player's turn")
         else:
             for i in range(0, 40):
-                if position == field_list[i]:
-                    counter = i + dice_num
+                if position == fieldList[i]:
+                    counter = i + diceNum
                     if counter > 39:
                         counter = counter - 40
-                    position = field_list[counter]
+                    position = fieldList[counter]
                     break
 
     # Check if the player is red
     elif color == "red":
-        if position in hauser_list[12:16]:
-            if dice_num == 6:
-                position = field_list[30]
+        if position in hauserList[12:16]:
+            if diceNum == 6:
+                position = fieldList[30]
             else:
                 print("No 6 rolled. Next player's turn")
         else:
             for i in range(0, 40):
-                if position == field_list[i]:
-                    counter = i + dice_num
+                if position == fieldList[i]:
+                    counter = i + diceNum
                     if counter > 39:
                         counter = counter - 40
-                    position = field_list[counter]
+                    position = fieldList[counter]
                     break
 
     # Return the updated position after the move
@@ -1049,8 +1048,8 @@ def winner(winPlayer):
     BG = scaleImage(pg.image.load("assets/mainscreen.png"), 1280, 720)
 
     # Create a button for quitting the game.
-    QUIT_BUTTON = Button(image=pg.image.load("assets/Play_Rect.png"), pos=(640, 550),
-                         text_input="QUIT", font=get_font(75), base_color="White", hovering_color="#fcce8d")
+    quitButton = Button(image=pg.image.load("assets/PlayRect.png"), pos=(640, 550),
+                         textInput="QUIT", font=getFont(75), baseColor="White", hoveringColor="#fcce8d")
 
     # Winner screen loop
     while True:
@@ -1061,8 +1060,8 @@ def winner(winPlayer):
         ENDSCREEN_MOUSE_POS = pg.mouse.get_pos()
 
         # Render the text displaying the winner.
-        ENDSCREEN_TEXT = get_font(30).render("The winner is player " + str(winPlayer), True, "#856c4a")  # Textfield
-        ENDSCREEN_RECT = ENDSCREEN_TEXT.get_rect(center=(640, 150))
+        endscreenText = getFont(30).render("The winner is player " + str(winPlayer), True, "#856c4a")  # Textfield
+        endScreenRect = endscreenText.get_rect(center=(640, 150))
 
         # Display the winner text.
         screen.blit(ENDSCREEN_TEXT, ENDSCREEN_RECT)
@@ -1087,25 +1086,25 @@ def winner(winPlayer):
         QUIT_BUTTON.update(screen)
 
 # Create Figure-Objects
-fge1 = Figure(position=hauser_list[0], color="yellow")
-fge2 = Figure(position=hauser_list[1], color="yellow")
-fge3 = Figure(position=hauser_list[2], color="yellow")
-fge4 = Figure(position=hauser_list[3], color="yellow")
+fge1 = Figure(position=hauserList[0], color="yellow")
+fge2 = Figure(position=hauserList[1], color="yellow")
+fge3 = Figure(position=hauserList[2], color="yellow")
+fge4 = Figure(position=hauserList[3], color="yellow")
 
-fgr1 = Figure(position=hauser_list[4], color="green")
-fgr2 = Figure(position=hauser_list[5], color="green")
-fgr3 = Figure(position=hauser_list[6], color="green")
-fgr4 = Figure(position=hauser_list[7], color="green")
+fgr1 = Figure(position=hauserList[4], color="green")
+fgr2 = Figure(position=hauserList[5], color="green")
+fgr3 = Figure(position=hauserList[6], color="green")
+fgr4 = Figure(position=hauserList[7], color="green")
 
-fb1 = Figure(position=hauser_list[8], color="blue")
-fb2 = Figure(position=hauser_list[9], color="blue")
-fb3 = Figure(position=hauser_list[10], color="blue")
-fb4 = Figure(position=hauser_list[11], color="blue")
+fb1 = Figure(position=hauserList[8], color="blue")
+fb2 = Figure(position=hauserList[9], color="blue")
+fb3 = Figure(position=hauserList[10], color="blue")
+fb4 = Figure(position=hauserList[11], color="blue")
 
-fr1 = Figure(position=hauser_list[12], color="red")
-fr2 = Figure(position=hauser_list[13], color="red")
-fr3 = Figure(position=hauser_list[14], color="red")
-fr4 = Figure(position=hauser_list[15], color="red")
+fr1 = Figure(position=hauserList[12], color="red")
+fr2 = Figure(position=hauserList[13], color="red")
+fr3 = Figure(position=hauserList[14], color="red")
+fr4 = Figure(position=hauserList[15], color="red")
 
 # Create Player Objects
 player1 = Player("", "")
@@ -1116,42 +1115,42 @@ player4 = Player("", "")
 #Create Figures as Buttons
 
 # Yellow Figures:
-FGE1_BUTTON = Button(image=pg.image.load("assets/figyellow.png"), pos=(hauser_list[0]), text_input="1", font=get_font(10),
-                     base_color="BLACK", hovering_color="WHITE")
+fge1Button = Button(image=pg.image.load("assets/figyellow.png"), pos=(hauserList[0]), textInput="1", font=getFont(10),
+                    baseColor="BLACK", hoveringColor="WHITE")
 
-FGE2_BUTTON = Button(image=pg.image.load("assets/figyellow.png"), pos=(hauser_list[1]), text_input="2", font=get_font(10),
-                     base_color="BLACK", hovering_color="WHITE")
-FGE3_BUTTON = Button(image=pg.image.load("assets/figyellow.png"), pos=(hauser_list[2]), text_input="3", font=get_font(10),
-                     base_color="BLACK", hovering_color="WHITE")
-FGE4_BUTTON = Button(image=pg.image.load("assets/figyellow.png"), pos=(hauser_list[3]), text_input="4", font=get_font(10),
-                     base_color="BLACK", hovering_color="WHITE")
+fge2Button = Button(image=pg.image.load("assets/figyellow.png"), pos=(hauserList[1]), textInput="2", font=getFont(10),
+                    baseColor="BLACK", hoveringColor="WHITE")
+fge3Button = Button(image=pg.image.load("assets/figyellow.png"), pos=(hauserList[2]), textInput="3", font=getFont(10),
+                    baseColor="BLACK", hoveringColor="WHITE")
+fge4Button = Button(image=pg.image.load("assets/figyellow.png"), pos=(hauserList[3]), textInput="4", font=getFont(10),
+                    baseColor="BLACK", hoveringColor="WHITE")
 #Red Figures:
-FR1_BUTTON = Button(image=pg.image.load("assets/figred.png"), pos=(hauser_list[12]), text_input="1", font=get_font(10),
-                    base_color="BLACK", hovering_color="WHITE")
-FR2_BUTTON = Button(image=pg.image.load("assets/figred.png"), pos=(hauser_list[13]), text_input="2", font=get_font(10),
-                    base_color="BLACK", hovering_color="WHITE")
-FR3_BUTTON = Button(image=pg.image.load("assets/figred.png"), pos=(hauser_list[14]), text_input="3", font=get_font(10),
-                    base_color="BLACK", hovering_color="WHITE")
-FR4_BUTTON = Button(image=pg.image.load("assets/figred.png"), pos=(hauser_list[15]), text_input="4", font=get_font(10),
-                    base_color="BLACK", hovering_color="WHITE")
+fr1Button = Button(image=pg.image.load("assets/figred.png"), pos=(hauserList[12]), textInput="1", font=getFont(10),
+                   baseColor="BLACK", hoveringColor="WHITE")
+fr2Button = Button(image=pg.image.load("assets/figred.png"), pos=(hauserList[13]), textInput="2", font=getFont(10),
+                   baseColor="BLACK", hoveringColor="WHITE")
+fr3Button = Button(image=pg.image.load("assets/figred.png"), pos=(hauserList[14]), textInput="3", font=getFont(10),
+                   baseColor="BLACK", hoveringColor="WHITE")
+fr4Button = Button(image=pg.image.load("assets/figred.png"), pos=(hauserList[15]), textInput="4", font=getFont(10),
+                   baseColor="BLACK", hoveringColor="WHITE")
 #Blue Figures:
-FB1_BUTTON = Button(image=pg.image.load("assets/figblue.png"), pos=(hauser_list[8]), text_input="1", font=get_font(10),
-                     base_color="BLACK", hovering_color="WHITE")
-FB2_BUTTON = Button(image=pg.image.load("assets/figblue.png"), pos=(hauser_list[9]), text_input="2", font=get_font(10),
-                     base_color="BLACK", hovering_color="WHITE")
-FB3_BUTTON = Button(image=pg.image.load("assets/figblue.png"), pos=(hauser_list[10]), text_input="3", font=get_font(10),
-                     base_color="BLACK", hovering_color="WHITE")
-FB4_BUTTON = Button(image=pg.image.load("assets/figblue.png"), pos=(hauser_list[11]), text_input="4", font=get_font(10),
-                     base_color="BLACK", hovering_color="WHITE")
+fb1Button = Button(image=pg.image.load("assets/figblue.png"), pos=(hauserList[8]), textInput="1", font=getFont(10),
+                   baseColor="BLACK", hoveringColor="WHITE")
+fb2Button = Button(image=pg.image.load("assets/figblue.png"), pos=(hauserList[9]), textInput="2", font=getFont(10),
+                   baseColor="BLACK", hoveringColor="WHITE")
+fb3Button = Button(image=pg.image.load("assets/figblue.png"), pos=(hauserList[10]), textInput="3", font=getFont(10),
+                   baseColor="BLACK", hoveringColor="WHITE")
+fb4Button = Button(image=pg.image.load("assets/figblue.png"), pos=(hauserList[11]), textInput="4", font=getFont(10),
+                   baseColor="BLACK", hoveringColor="WHITE")
 
 #Green Figures:
-FGR1_BUTTON = Button(image=pg.image.load("assets/figgreen.png"), pos=(hauser_list[4]), text_input="1", font=get_font(10),
-                     base_color="BLACK", hovering_color="WHITE")
-FGR2_BUTTON = Button(image=pg.image.load("assets/figgreen.png"), pos=(hauser_list[5]), text_input="2", font=get_font(10),
-                     base_color="BLACK", hovering_color="WHITE")
-FGR3_BUTTON = Button(image=pg.image.load("assets/figgreen.png"), pos=(hauser_list[6]), text_input="3", font=get_font(10),
-                     base_color="BLACK", hovering_color="WHITE")
-FGR4_BUTTON = Button(image=pg.image.load("assets/figgreen.png"), pos=(hauser_list[7]), text_input="4", font=get_font(10),
-                     base_color="BLACK", hovering_color="WHITE")
+fgr1Button = Button(image=pg.image.load("assets/figgreen.png"), pos=(hauserList[4]), textInput="1", font=getFont(10),
+                    baseColor="BLACK", hoveringColor="WHITE")
+fgr2Button = Button(image=pg.image.load("assets/figgreen.png"), pos=(hauserList[5]), textInput="2", font=getFont(10),
+                    baseColor="BLACK", hoveringColor="WHITE")
+fgr3Button = Button(image=pg.image.load("assets/figgreen.png"), pos=(hauserList[6]), textInput="3", font=getFont(10),
+                    baseColor="BLACK", hoveringColor="WHITE")
+fgr4Button = Button(image=pg.image.load("assets/figgreen.png"), pos=(hauserList[7]), textInput="4", font=getFont(10),
+                    baseColor="BLACK", hoveringColor="WHITE")
 
-main_menu()
+mainMenu()

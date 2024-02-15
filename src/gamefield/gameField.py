@@ -1,6 +1,6 @@
 class GameField:
     def __init__(self):
-        self.field_list = self.fields()
+        self.fieldList = self.fields()
 
     def fields(self):
         # initializing the fields
@@ -70,10 +70,10 @@ class GameField:
         f40 = [637, 660]
 
         # list of fields
-        field_list = [f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12, f13, f14, f15, f16, f17, f18, f19, f20, f21,
+        fieldList = [f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12, f13, f14, f15, f16, f17, f18, f19, f20, f21,
                       f22, f23, f24, f25, f26, f27, f28, f29, f30, f31, f32, f33, f34, f35, f36, f37, f38, f39,
                       f40]
-        return field_list
+        return fieldList
 
     def houses(self):
         # Coordinates for houses
@@ -103,8 +103,8 @@ class GameField:
         hr4 = [938, 660]
 
         # list of houses
-        hauser_list = [hge1, hge2, hge3, hge4, hgr1, hgr2, hgr3, hgr4, hb1, hb2, hb3, hb4, hr1, hr2, hr3, hr4]
-        return hauser_list
+        hauserList = [hge1, hge2, hge3, hge4, hgr1, hgr2, hgr3, hgr4, hb1, hb2, hb3, hb4, hr1, hr2, hr3, hr4]
+        return hauserList
 
     def finishFields(self):
         # target fields
@@ -134,8 +134,8 @@ class GameField:
         zr4 = [697, 357]
 
         # list of target fields
-        zielfelder_list = [zge1, zge2, zge3, zge4, zgr1, zgr2, zgr3, zgr4, zb1, zb2, zb3, zb4, zr1, zr2, zr3, zr4]
-        return zielfelder_list
+        zielfelderList = [zge1, zge2, zge3, zge4, zgr1, zgr2, zgr3, zgr4, zb1, zb2, zb3, zb4, zr1, zr2, zr3, zr4]
+        return zielfelderList
 
     # defining the starting fields of the colors
     def startPosition(self, color):
