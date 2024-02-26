@@ -1,3 +1,6 @@
+Eigentlich sind diese Criteria unter folgendem Link zu finden: https://github.com/Amalia-Dann/Mensch_aergere_dich_nicht/wiki/Grading-Criteria:-Mensch-ärgere-dich-nicht
+
+
 # Grading Criteria Programmieren T3INF1004 (Mensch ärgere dich nicht)
 ____________________________________________________________________________________________________________________________________________
 ## FACHKOMPETENZ (40 Punkte)
